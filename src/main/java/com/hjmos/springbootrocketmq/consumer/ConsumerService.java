@@ -18,7 +18,19 @@ public class ConsumerService {
         try {
             List<MessageExt> msgs = event.getMsgs();
             for (MessageExt msg : msgs) {
-                System.err.println("消费消息:"+new String(msg.getBody()));
+                System.err.println("线程："+Thread.currentThread().getName()+"，消费消息:"+new String(msg.getBody()));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @EventListener(condition = "#event.msgs[0].topic=='user-topic2'")
+    public void rocketmqMsgListener2(MessageEvent event) {
+        try {
+            List<MessageExt> msgs = event.getMsgs();
+            for (MessageExt msg : msgs) {
+                System.err.println("线程："+Thread.currentThread().getName()+"，消费主题user-topic2消息:"+new String(msg.getBody())+new String(msg.getMsgId()));
             }
         } catch (Exception e) {
             e.printStackTrace();

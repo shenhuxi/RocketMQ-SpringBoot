@@ -1,34 +1,29 @@
 package com.hjmos.springbootrocketmq.config;
 
-import lombok.*;
-import lombok.experimental.Accessors;
-import org.hibernate.validator.constraints.NotBlank;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.stereotype.Component;
-import org.springframework.validation.annotation.Validated;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
-@Data
-@PropertySource("classpath:/application.yml")
-@EqualsAndHashCode(callSuper = false)
-@Accessors(chain = true)
-@Component
-@ConfigurationProperties(prefix = "imc.rocketmq")
-@Validated
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+import lombok.experimental.Accessors;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
+
+/**
+ * @author yuyang
+ * 读取配置文件信息
+ */
+@PropertySource("classpath:config/rocketmq.properties")
+@ConfigurationProperties(prefix = "suning.rocketmq")
+@Configuration
 @Setter
 @Getter
 @ToString
-public class RocketMQProperties {
-
-    @NotBlank
-    private String namesrvAddr = "127.0.0.1";
-
-    private List<ConsumerConfig> consumerList;
-
+@Accessors(chain = true)
+public class RocketMQProperties{
+    private String namesrvAddr;
     private String producerGroupName;
     private String transactionProducerGroupName;
     private String consumerGroupName;
@@ -41,26 +36,4 @@ public class RocketMQProperties {
     private boolean enableOrderConsumer;
     private List<String> subscribe = new ArrayList<String>();
 
-
-    @Data
-    @Validated
-    public static class ConsumerConfig {
-
-        private boolean enable = false;
-
-        private String name = UUID.randomUUID().toString();
-
-        private String namesrvAddr;
-
-        @NotBlank
-        private String groupName;
-
-        @NotBlank
-        private String topic;
-
-        private String tags = "*";
-
-        private boolean order = false;
-
-    }
 }
