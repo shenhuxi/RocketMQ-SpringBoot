@@ -5,9 +5,15 @@ import com.hjmos.springbootrocketmq.annotation.ProduceMessage;
 import com.hjmos.springbootrocketmq.service.ProduceMessageService;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.*;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.DefaultParameterNameDiscoverer;
+import org.springframework.expression.EvaluationContext;
+import org.springframework.expression.Expression;
+import org.springframework.expression.spel.standard.SpelExpressionParser;
+import org.springframework.expression.spel.support.StandardEvaluationContext;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -26,6 +32,15 @@ public class ProduceMessageAspect {
     ThreadLocal<Long> startTime = new ThreadLocal<>();
 
     ThreadLocal<String> params = new ThreadLocal<>();
+
+    /**
+     * 用于SpEL表达式解析.
+     */
+    private SpelExpressionParser parser = new SpelExpressionParser();
+    /**
+     * 用于获取方法参数定义名字.
+     */
+    private DefaultParameterNameDiscoverer nameDiscoverer = new DefaultParameterNameDiscoverer();
 
     /**
      * 切入点
@@ -90,4 +105,40 @@ public class ProduceMessageAspect {
         log.error("异常信息为 ： " + ex.getMessage());
     }
 
+    /**
+     * 环切
+     * @param joinPoint 切入点对象
+     * @return 执行结果
+     * @throws Throwable
+     */
+    @Around("controllerAspect()")
+    public Object doBefore(ProceedingJoinPoint joinPoint) throws Throwable {
+        String content =null;
+        //获取注解对象
+        MethodSignature ms = (MethodSignature) joinPoint.getSignature();
+        Method method = ms.getMethod();
+        ProduceMessage annotation = method.getAnnotation(ProduceMessage.class);
+        //判断是否使用了spEL表达式
+        if(annotation.content().contains("#"))
+            content = generateKeyBySpEL(annotation.content(),joinPoint);
+        else
+            content = annotation.content();
+        //执行目标方法
+        Object resultOld = joinPoint.proceed();
+        //发送消息队列
+        produceMessageService.produceMessage(annotation,content);
+        return resultOld;
+    }
+
+    public String generateKeyBySpEL(String spELString, ProceedingJoinPoint joinPoint) {
+        MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
+        String[] paramNames = nameDiscoverer.getParameterNames(methodSignature.getMethod());
+        Expression expression = parser.parseExpression(spELString);
+        EvaluationContext context = new StandardEvaluationContext();
+        Object[] args = joinPoint.getArgs();
+        for(int i = 0 ; i < args.length ; i++) {
+            context.setVariable(paramNames[i], args[i]);
+        }
+        return expression.getValue(context).toString();
+    }
 }

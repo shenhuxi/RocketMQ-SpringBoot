@@ -35,6 +35,11 @@ public class ProduceMessageServiceImpl implements ProduceMessageService {
         sendAsyncDefault(produceMessage.topic(),produceMessage.tag(),produceMessage.keys(),produceMessage.content());
     }
 
+    @Override
+    public void produceMessage(ProduceMessage produceMessage, String content) {
+        sendAsyncDefault(produceMessage.topic(),produceMessage.tag(),produceMessage.keys(),content);
+    }
+
     /**
      * 单边发送
      *

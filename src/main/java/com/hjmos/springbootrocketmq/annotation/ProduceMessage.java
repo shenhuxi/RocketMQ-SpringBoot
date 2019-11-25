@@ -1,6 +1,7 @@
 package com.hjmos.springbootrocketmq.annotation;
 
 import com.hjmos.springbootrocketmq.enums.TransactionEnum;
+import lombok.Data;
 import org.hibernate.validator.constraints.NotBlank;
 
 import java.lang.annotation.*;
@@ -10,7 +11,7 @@ import java.lang.annotation.*;
  * @author yuyang
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.METHOD)
+@Target({ElementType.METHOD,ElementType.ANNOTATION_TYPE})
 @Documented
 public @interface ProduceMessage {
     String value() default "";

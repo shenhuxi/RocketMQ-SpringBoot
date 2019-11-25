@@ -9,4 +9,6 @@ public interface ProduceMessageService {
      * @param annotation
      */
     void produceMessage(ProduceMessage annotation);
+
+    void produceMessage(ProduceMessage annotation, String content);
 }
