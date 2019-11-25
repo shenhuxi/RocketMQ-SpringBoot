@@ -37,7 +37,6 @@ public class RocketMQConfiguration {
 
     @Autowired
     private RocketMQProperties rocketMQProperties;
-  
 
     //事件监听
     @Autowired
@@ -210,25 +209,7 @@ public class RocketMQConfiguration {
                 }
             });
         }
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    Thread.sleep(5000);
-
-                    try {
-                        consumer.start();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    log.info("rocketmq consumer server is starting....");
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-
-        }).start();
-
+        consumer.start();
         return consumer;
     }
 

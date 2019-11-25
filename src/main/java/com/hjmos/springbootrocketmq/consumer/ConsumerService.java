@@ -30,7 +30,7 @@ public class ConsumerService {
         try {
             List<MessageExt> msgs = event.getMsgs();
             for (MessageExt msg : msgs) {
-                System.err.println("线程："+Thread.currentThread().getName()+"，消费主题user-topic2消息:"+new String(msg.getBody())+new String(msg.getMsgId()));
+                System.err.println("线程："+Thread.currentThread().getName()+"，消费主题user-topic2消息:"+new String(msg.getBody())+ "--ID："+msg.getMsgId());
             }
         } catch (Exception e) {
             e.printStackTrace();

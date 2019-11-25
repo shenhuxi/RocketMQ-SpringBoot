@@ -47,6 +47,10 @@ public class ProduceMessageServiceImpl implements ProduceMessageService {
         try {
             Message msg = new Message(topic, tag, keys, content.getBytes());
             defaultProducer.sendOneway(msg);
+           defaultProducer.send(msg, (queues, message, queNum) -> {
+                int queueNum = Integer.parseInt(queNum.toString());
+                return queues.get(queueNum);
+            },0);
             this.logMsg(msg);
         } catch (Exception e) {
             log.error("单边发送消息失败", e);
