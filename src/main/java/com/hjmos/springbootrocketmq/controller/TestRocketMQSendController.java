@@ -19,6 +19,7 @@ public class TestRocketMQSendController {
     @ProduceMessage(topic = "user-topic", tag = "white", content = "#order.userName", keys ="", orderId = 0, transaction = TransactionEnum.NO)
     public boolean createOrder(@RequestBody SubwayOrder order) {
         log.info("生成订单完成，发送消息到RocketMQ");
+
         return true;
     }
 
