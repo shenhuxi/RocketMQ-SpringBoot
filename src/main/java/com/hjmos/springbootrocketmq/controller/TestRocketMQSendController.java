@@ -1,32 +1,55 @@
 package com.hjmos.springbootrocketmq.controller;
 
-import com.hjmos.springbootrocketmq.annotation.ProduceMessage;
-import com.hjmos.springbootrocketmq.entity.SubwayOrder;
-import com.hjmos.springbootrocketmq.enums.TransactionEnum;
-import com.hjmos.springbootrocketmq.service.impl.ProduceMessageServiceImpl;
+import com.alibaba.fastjson.JSONObject;
+import com.hjmos.springbootrocketmq.entity.ProduceMessage;
+import com.hjmos.springbootrocketmq.service.ProduceMessageService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * 本类只用于测试服务，实际不存在
+ */
 @RestController()
-@RequestMapping("/testSend")
 @Slf4j
 public class TestRocketMQSendController {
     @Autowired
-    private ProduceMessageServiceImpl produceMessageServiceImpl;
+    private ProduceMessageService produceMessageService;
 
-    @PostMapping("/createOrder")
-    @ProduceMessage(topic = "user-topic", tag = "white", content = "#order.userName", keys ="", orderId = 0, transaction = TransactionEnum.NO)
-    public boolean createOrder(@RequestBody SubwayOrder order) {
-        log.info("生成订单完成，发送消息到RocketMQ");
-        return true;
+    @GetMapping("/createMessage")
+    public boolean createMessage() {
+        log.info("创建一个用户消息开始...........");
+        User user = new User("jardon", 18);
+        ProduceMessage produceMessage = new ProduceMessage("AFC-FLOW", "book", JSONObject.toJSONString(user));
+        return produceMessageService.produceMessage(produceMessage);
+    }
+}
+
+/**
+ * 仅用于测试使用
+ */
+class User {
+    private String name;
+    private int age;
+
+    public User(String name, int age) {
+        this.name = name;
+        this.age = age;
     }
 
-    @GetMapping("/createMessge")
-    @ProduceMessage(topic = "user-topic", tag = "white", content = "#userName", keys ="", orderId = 0, transaction = TransactionEnum.NO)
-    public boolean createMessge(@RequestParam String  userName) {
-        log.info("创建一个用户消息开始...........");
-       // produceMessageServiceImpl.sendAsyncDefault("user-topic","white",null,userName);
-        return true;
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
     }
 }

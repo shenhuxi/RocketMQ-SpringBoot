@@ -36,4 +36,17 @@ public class ConsumerService {
             e.printStackTrace();
         }
     }
+
+    @EventListener(condition = "#event.msgs[0].topic=='AFC-FLOW'")
+    public void rocketmqMsgListener3(MessageEvent event){
+        try {
+            List<MessageExt> msgs = event.getMsgs();
+            for (MessageExt msg : msgs) {
+                System.err.println("线程："+Thread.currentThread().getName()+"，消费消息:"+new String(msg.getBody()));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }

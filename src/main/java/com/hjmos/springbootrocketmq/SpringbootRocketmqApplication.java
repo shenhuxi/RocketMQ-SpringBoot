@@ -2,8 +2,12 @@ package com.hjmos.springbootrocketmq;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Configuration;
 
+/**
+ * @author yuyang
+ * 程序入口
+ *
+ */
 @SpringBootApplication
 public class SpringbootRocketmqApplication {
 

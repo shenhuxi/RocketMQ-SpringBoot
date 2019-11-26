@@ -6,7 +6,7 @@ import org.springframework.context.ApplicationEvent;
 
 import java.util.List;
 /**
- * 监听对象
+ * 监听
  * @author yuyang
  *
  */

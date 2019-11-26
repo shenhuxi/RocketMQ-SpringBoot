@@ -3,6 +3,7 @@ package com.hjmos.springbootrocketmq.config;
 import javax.annotation.PostConstruct;
 
 import com.hjmos.springbootrocketmq.bean.MessageEvent;
+import com.hjmos.springbootrocketmq.entity.RocketMQProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
 import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyContext;
@@ -23,22 +24,24 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
  * @author yuyang
- * <p>
- * 通过使用指定的文件读取类 来加载配置文件到字段中
+ * 加载配置信息并初始化
  */
 @Configuration
 @EnableConfigurationProperties(RocketMQProperties.class)
 @Slf4j
-public class RocketMQConfiguration {
+public class RocketMqConfiguration {
 
     @Autowired
     private RocketMQProperties rocketMQProperties;
 
-    //事件监听
+    /**
+     * 事件监听
+     */
     @Autowired
     private ApplicationEventPublisher publisher = null;
 
@@ -51,20 +54,6 @@ public class RocketMQConfiguration {
      */
     @PostConstruct
     public void init() {
-        System.err.println(rocketMQProperties.getNamesrvAddr());
-        System.err.println(rocketMQProperties.getProducerGroupName());
-        System.err.println(rocketMQProperties.getConsumerBatchMaxSize());
-        System.err.println(rocketMQProperties.getConsumerGroupName());
-        System.err.println(rocketMQProperties.getConsumerInstanceName());
-        System.err.println(rocketMQProperties.getProducerInstanceName());
-        System.err.println(rocketMQProperties.getProducerTranInstanceName());
-        System.err.println(rocketMQProperties.getTransactionProducerGroupName());
-        System.err.println(rocketMQProperties.isConsumerBroadcasting());
-        System.err.println(rocketMQProperties.isEnableHistoryConsumer());
-        System.err.println(rocketMQProperties.isEnableOrderConsumer());
-        System.out.println(rocketMQProperties.getSubscribe().get(0));
-
-        System.out.println(rocketMQProperties.getConsumerGroupName());
     }
 
     /**
@@ -111,34 +100,22 @@ public class RocketMQConfiguration {
         return producer;
     }
 
-//    /**
-//     * 创建支持消息事务发送的实例
-//     * @param transactionListener
-//     * @return
-//     * @throws Exception
-//     */
-//    @Bean
-//    public TransactionMQProducer transactionProducer(TransactionListener transactionListener) throws Exception {
-//        TransactionMQProducer producer = new TransactionMQProducer(rocketMQProperties.getTransactionProducerGroupName());
-//        producer.setNamesrvAddr(rocketMQProperties.getNamesrvAddr());
-//        producer.setInstanceName(System.currentTimeMillis() + "");
-//        ExecutorService executorService = new ThreadPoolExecutor(2, 5, 100, TimeUnit.SECONDS, new ArrayBlockingQueue<Runnable>(2000), new ThreadFactory() {
-//            @Override
-//            public Thread newThread(Runnable r) {
-//                Thread thread = new Thread(r);
-//                thread.setName("client-transaction-msg-check-thread");
-//                return thread;
-//            }
-//        });
-//
-//        producer.setExecutorService(executorService);
-//        producer.setTransactionListener(transactionListener);
-//        producer.start();
-//        log.info("rocketmq transaction producer server is starting....");
-//        return producer;
-//    }
-
-
+    /**
+     * 初始化消费者
+     */
+    @Bean
+    public void initConsumerInstance() {
+        List<Map<String, Object>> consumerList = rocketMQProperties.getConsumerList();
+        if (consumerList.size() > 0) {
+            consumerList.stream().forEach(map -> {
+                try {
+                    pushConsumer(map);
+                } catch (MQClientException e) {
+                    e.printStackTrace();
+                }
+            });
+        }
+    }
 
     /**
      * 创建消息消费的实例
@@ -146,30 +123,23 @@ public class RocketMQConfiguration {
      * @return
      * @throws MQClientException
      */
-    @Bean
-    public DefaultMQPushConsumer pushConsumer() throws MQClientException {
-        DefaultMQPushConsumer consumer = new DefaultMQPushConsumer(
-                rocketMQProperties.getConsumerGroupName());
-        consumer.setNamesrvAddr(rocketMQProperties.getNamesrvAddr());
-        consumer.setInstanceName(rocketMQProperties.getConsumerInstanceName());
+    private DefaultMQPushConsumer pushConsumer(Map consumerConfig) throws MQClientException {
+        DefaultMQPushConsumer consumer = new DefaultMQPushConsumer(consumerConfig.get("groupName").toString());
+        consumer.setNamesrvAddr(consumerConfig.get("namesrvAddr").toString());
 
         //判断是否是广播模式
-        if (rocketMQProperties.isConsumerBroadcasting()) {
+        if (Boolean.parseBoolean(consumerConfig.get("consumerBroadCasting").toString())) {
             consumer.setMessageModel(MessageModel.BROADCASTING);
         }
         //设置批量消费
-        consumer.setConsumeMessageBatchMaxSize(rocketMQProperties
-                .getConsumerBatchMaxSize() == 0 ? 1 : rocketMQProperties
-                .getConsumerBatchMaxSize());
+        consumer.setConsumeMessageBatchMaxSize(Integer.parseInt(consumerConfig.get("consumerBatchMaxSize").toString()) == 0 ? 1 : Integer.parseInt(consumerConfig.get("consumerBatchMaxSize").toString()));
 
         //获取topic和tag
-        List<String> subscribeList = rocketMQProperties.getSubscribe();
-        for (String sunscribe : subscribeList) {
-            consumer.subscribe(sunscribe.split(":")[0], sunscribe.split(":")[1]);
-        }
+        consumer.subscribe(consumerConfig.get("topic").toString(), consumerConfig.get("tags").toString());
 
-        // 顺序消费
-        if (rocketMQProperties.isEnableOrderConsumer()) {
+
+        if (Boolean.parseBoolean(consumerConfig.get("enableOrderConsumer").toString())) {
+            // 顺序消费
             consumer.registerMessageListener(new MessageListenerOrderly() {
                 @Override
                 public ConsumeOrderlyStatus consumeMessage(
@@ -187,9 +157,8 @@ public class RocketMQConfiguration {
                     return ConsumeOrderlyStatus.SUCCESS;
                 }
             });
-        }
-        // 并发消费
-        else {
+        } else {
+            //并发消费
             consumer.registerMessageListener(new MessageListenerConcurrently() {
                 @Override
                 public ConsumeConcurrentlyStatus consumeMessage(
@@ -209,7 +178,25 @@ public class RocketMQConfiguration {
                 }
             });
         }
-        consumer.start();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(5000);
+
+                    try {
+                        consumer.start();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    log.info("rocketmq consumer server is starting....");
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        }).start();
+
         return consumer;
     }
 

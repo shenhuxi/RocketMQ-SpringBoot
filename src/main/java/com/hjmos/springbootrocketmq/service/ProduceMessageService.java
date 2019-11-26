@@ -1,14 +1,16 @@
 package com.hjmos.springbootrocketmq.service;
 
-import com.hjmos.springbootrocketmq.annotation.ProduceMessage;
+import com.hjmos.springbootrocketmq.entity.ProduceMessage;
 
+/**
+ * @author yuyang
+ * 生产消息的服务接口
+ */
 public interface ProduceMessageService {
     /**
-     * 发送消息的总入口
-     *
-     * @param annotation
+     * 生产消息的唯一对外服务入口
+     * @param produceMessage
+     * @return
      */
-    void produceMessage(ProduceMessage annotation);
-
-    void produceMessage(ProduceMessage annotation, String content);
+    boolean produceMessage(ProduceMessage produceMessage);
 }

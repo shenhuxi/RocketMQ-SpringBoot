@@ -1,7 +1,8 @@
 package com.hjmos.springbootrocketmq.service.impl;
 
-import com.hjmos.springbootrocketmq.annotation.ProduceMessage;
-import com.hjmos.springbootrocketmq.enums.TransactionEnum;
+import com.alibaba.fastjson.JSONException;
+import com.alibaba.fastjson.JSONObject;
+import com.hjmos.springbootrocketmq.entity.ProduceMessage;
 import com.hjmos.springbootrocketmq.exception.MqSendException;
 import com.hjmos.springbootrocketmq.service.ProduceMessageService;
 import lombok.extern.slf4j.Slf4j;
@@ -10,9 +11,13 @@ import org.apache.rocketmq.common.message.Message;
 import org.apache.rocketmq.common.message.MessageQueue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import javax.validation.constraints.NotBlank;
 import java.util.List;
 
+/**
+ * @author yuyang
+ * 生产消息的服务实现
+ */
 @Slf4j
 @Service
 public class ProduceMessageServiceImpl implements ProduceMessageService {
@@ -24,21 +29,60 @@ public class ProduceMessageServiceImpl implements ProduceMessageService {
 
     private RocketSendCallback rocketSendCallback = new RocketSendCallback();
 
+
     /**
-     * 发送消息的总入口
-     * TODO 逻辑需要写完
+     * 发送消息的方法入口
+     *
      * @param produceMessage
+     * @return
      */
-    public void produceMessage(ProduceMessage produceMessage) {
-        TransactionEnum transaction = produceMessage.transaction();
-        //sendOneWay(produceMessage.topic(),produceMessage.tag(),produceMessage.keys(),produceMessage.content());
-        sendAsyncDefault(produceMessage.topic(),produceMessage.tag(),produceMessage.keys(),produceMessage.content());
+    @Override
+    public boolean produceMessage(ProduceMessage produceMessage) {
+        return produceMessageCore(produceMessage);
     }
 
-    @Override
-    public void produceMessage(ProduceMessage produceMessage, String content) {
-        sendAsyncDefault(produceMessage.topic(),produceMessage.tag(),produceMessage.keys(),content);
+    /**
+     * 组装消息的核心方法
+     * TODO 暂时实现普通的方式
+     *
+     * @return
+     */
+    private boolean produceMessageCore(ProduceMessage produceMessage) {
+        @NotBlank String topic = produceMessage.getTopic();
+        @NotBlank String content = produceMessage.getContent();
+        @NotBlank String tag = produceMessage.getTag();
+        String keys = produceMessage.getKeys();
+        if (!verifyJson(content)) {
+            throw new MqSendException("消息内容不是json格式");
+        }
+
+        try {
+            sendMsg(topic, tag, keys, content);
+        } catch (Exception e) {
+            log.error("发送普通消息失败", e);
+            throw new MqSendException(e);
+        }
+        return true;
     }
+
+    /**
+     * 校验json字符串
+     *
+     * @param json
+     */
+    private boolean verifyJson(String json) {
+        try {
+            JSONObject.parseObject(json);
+        } catch (JSONException ex) {
+            try {
+                JSONObject.parseArray(json);
+            } catch (JSONException ex1) {
+                return false;
+            }
+        }
+        return true;
+    }
+
 
     /**
      * 单边发送
@@ -48,20 +92,16 @@ public class ProduceMessageServiceImpl implements ProduceMessageService {
      * @param keys
      * @param content
      */
-    private void sendOneWay(String topic, String tag, String keys, String content) {
-        try {
-            Message msg = new Message(topic, tag, keys, content.getBytes());
-            defaultProducer.sendOneway(msg);
-           defaultProducer.send(msg, (queues, message, queNum) -> {
-                int queueNum = Integer.parseInt(queNum.toString());
-                return queues.get(queueNum);
-            },0);
-            this.logMsg(msg);
-        } catch (Exception e) {
-            log.error("单边发送消息失败", e);
-            throw new MqSendException(e);
-        }
+    private void sendOneWay(String topic, String tag, String keys, String content) throws Exception {
+        Message msg = new Message(topic, tag, keys, content.getBytes());
+        defaultProducer.sendOneway(msg);
+        defaultProducer.send(msg, (queues, message, queNum) -> {
+            int queueNum = Integer.parseInt(queNum.toString());
+            return queues.get(queueNum);
+        }, 0);
+        this.logMsg(msg);
     }
+
     /**
      * 异步发送 默认回调函数
      *
@@ -70,14 +110,9 @@ public class ProduceMessageServiceImpl implements ProduceMessageService {
      * @param keys
      * @param content
      */
-    public void sendAsyncDefault(String topic, String tag, String keys, String content) {
+    private void sendAsyncDefault(String topic, String tag, String keys, String content) throws Exception {
         Message msg = new Message(topic, tag, keys, content.getBytes());
-        try {
-            defaultProducer.send(msg, rocketSendCallback);
-        } catch (Exception e) {
-            log.error("异步发送消息失败", e);
-            throw new MqSendException(e);
-        }
+        defaultProducer.send(msg, rocketSendCallback);
         this.logMsg(msg);
     }
 
@@ -95,59 +130,39 @@ public class ProduceMessageServiceImpl implements ProduceMessageService {
     }
 
 
-
     /**
      * 发送普通消息
      */
-    private SendResult sendMsg(String topic, String tags, String keys, String content) {
+    private SendResult sendMsg(String topic, String tags, String keys, String content) throws Exception {
         Message msg = new Message(topic, tags, keys, content.getBytes());
-        try {
-            SendResult result = defaultProducer.send(msg);
-            this.logMsg(msg, result);
-            return result;
-        } catch (Exception e) {
-            e.printStackTrace();
-            log.error("同步发送普通消息失败", e);
-            throw new MqSendException(e);
-        }
+        SendResult result = defaultProducer.send(msg);
+        this.logMsg(msg, result);
+        return result;
     }
 
     /**
      * 发送事务消息
-     *
      */
-    public SendResult sendTransactionMsg(String topic, String tags, String keys, String content) {
+    private SendResult sendTransactionMsg(String topic, String tags, String keys, String content) throws Exception {
         Message msg = new Message(topic, tags, keys, content.getBytes());
-        try {
-            SendResult sendResult = transactionProducer.sendMessageInTransaction(msg, null);
-            this.logMsg(msg, sendResult);
-            return sendResult;
-        } catch (Exception e) {
-            log.error("同步发送事务消息失败", e);
-            throw new MqSendException(e);
-        }
-
-
+        SendResult sendResult = transactionProducer.sendMessageInTransaction(msg, null);
+        this.logMsg(msg, sendResult);
+        return sendResult;
     }
 
     /**
      * 支持顺序发送消息
      */
-    private SendResult sendMsgOrder(String topic, String tags, String keys, String content, int orderId) {
+    private SendResult sendMsgOrder(String topic, String tags, String keys, String content, int orderId) throws Exception {
         Message msg = new Message(topic, tags, keys, content.getBytes());
-        try {
-            SendResult sendResult = defaultProducer.send(msg, (List<MessageQueue> mqs, Message message, Object arg) -> {
-                        Integer id = (Integer) arg;
-                        int index = id % mqs.size();
-                        return mqs.get(index);
-                    }
-                    , orderId);
-            this.logMsg(msg, sendResult);
-            return sendResult;
-        } catch (Exception e) {
-            log.error("有顺序发送消息失败", e);
-            throw new MqSendException(e);
-        }
+        SendResult sendResult = defaultProducer.send(msg, (List<MessageQueue> mqs, Message message, Object arg) -> {
+                    Integer id = (Integer) arg;
+                    int index = id % mqs.size();
+                    return mqs.get(index);
+                }
+                , orderId);
+        this.logMsg(msg, sendResult);
+        return sendResult;
     }
 
 
