@@ -2,15 +2,20 @@ package com.hjmos.springbootrocketmq.service.impl;
 
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
-import com.hjmos.springbootrocketmq.entity.ProduceMessage;
+import com.hjmos.springbootrocketmq.entity.KafkaProduceMessage;
+import com.hjmos.springbootrocketmq.entity.RocketProduceMessage;
 import com.hjmos.springbootrocketmq.exception.MqSendException;
 import com.hjmos.springbootrocketmq.service.ProduceMessageService;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.rocketmq.client.producer.*;
+import org.apache.rocketmq.client.producer.DefaultMQProducer;
+import org.apache.rocketmq.client.producer.SendCallback;
+import org.apache.rocketmq.client.producer.SendResult;
+import org.apache.rocketmq.client.producer.TransactionMQProducer;
 import org.apache.rocketmq.common.message.Message;
 import org.apache.rocketmq.common.message.MessageQueue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import javax.validation.constraints.NotBlank;
 import java.util.List;
 
@@ -37,7 +42,7 @@ public class ProduceMessageServiceImpl implements ProduceMessageService {
      * @return
      */
     @Override
-    public boolean produceMessage(ProduceMessage produceMessage) {
+    public boolean produceMessage(RocketProduceMessage produceMessage) {
         return produceMessageCore(produceMessage);
     }
 
@@ -47,7 +52,7 @@ public class ProduceMessageServiceImpl implements ProduceMessageService {
      *
      * @return
      */
-    private boolean produceMessageCore(ProduceMessage produceMessage) {
+    private boolean produceMessageCore(RocketProduceMessage produceMessage) {
         @NotBlank String topic = produceMessage.getTopic();
         @NotBlank String content = produceMessage.getContent();
         @NotBlank String tag = produceMessage.getTag();

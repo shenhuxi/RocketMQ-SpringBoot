@@ -14,7 +14,7 @@ import javax.validation.constraints.NotBlank;
 @Getter
 @Setter
 @ToString
-public class ProduceMessage {
+public class RocketProduceMessage {
     /**
      * 主题
      * @return
@@ -48,12 +48,12 @@ public class ProduceMessage {
      */
     private int orderId;
 
-    public ProduceMessage(@NotBlank String topic, @NotBlank String tag, @NotBlank String content) {
+    public RocketProduceMessage(@NotBlank String topic, @NotBlank String tag, @NotBlank String content) {
         this.topic = topic;
         this.tag = tag;
         this.content = content;
     }
 
-    public ProduceMessage() {
+    public RocketProduceMessage() {
     }
 }

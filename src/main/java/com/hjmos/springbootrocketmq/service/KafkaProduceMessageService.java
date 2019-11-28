@@ -7,12 +7,11 @@ import com.hjmos.springbootrocketmq.entity.RocketProduceMessage;
  * @author yuyang
  * 生产消息的服务接口
  */
-public interface ProduceMessageService {
+public interface KafkaProduceMessageService {
     /**
      * 生产消息的唯一对外服务入口
      * @param produceMessage
      * @return
      */
-    boolean produceMessage(RocketProduceMessage produceMessage);
-
+    boolean produceMessage(KafkaProduceMessage produceMessage);
 }

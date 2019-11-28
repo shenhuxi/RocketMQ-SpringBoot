@@ -1,11 +1,19 @@
 package com.hjmos.springbootrocketmq.controller;
 
 import com.alibaba.fastjson.JSONObject;
-import com.hjmos.springbootrocketmq.entity.ProduceMessage;
+import com.hjmos.springbootrocketmq.entity.KafkaProduceMessage;
+import com.hjmos.springbootrocketmq.entity.RocketProduceMessage;
+import com.hjmos.springbootrocketmq.service.KafkaProduceMessageService;
 import com.hjmos.springbootrocketmq.service.ProduceMessageService;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.validator.constraints.Length;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+
 
 /**
  * 本类只用于测试服务，实际不存在
@@ -15,13 +23,21 @@ import org.springframework.web.bind.annotation.*;
 public class TestRocketMQSendController {
     @Autowired
     private ProduceMessageService produceMessageService;
-
-    @GetMapping("/createMessage")
+    @Autowired
+    private KafkaProduceMessageService kafkaProduceMessageService;
+    @GetMapping("/createRocketMessage")
     public boolean createMessage() {
         log.info("创建一个用户消息开始...........");
         User user = new User("jardon", 18);
-        ProduceMessage produceMessage = new ProduceMessage("AFC-FLOW", "book", JSONObject.toJSONString(user));
+        RocketProduceMessage produceMessage = new RocketProduceMessage("AFC-FLOW", "book", JSONObject.toJSONString(user));
         return produceMessageService.produceMessage(produceMessage);
+    }
+    @GetMapping("/createKafkaMessage")
+    public boolean createKafkaMessage() {
+        log.info("创建一个用户消息开始...........");
+        User user = new User("jardon", 18);
+        KafkaProduceMessage produceMessage = new KafkaProduceMessage("Topic_user", JSONObject.toJSONString(user));
+        return kafkaProduceMessageService.produceMessage(produceMessage);
     }
 }
 
