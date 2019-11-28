@@ -49,7 +49,7 @@ rocketmq:
 spring:
   kafka:
     # 指定kafka 代理地址，可以多个
-    bootstrap-servers: 172.23.122.211:32776
+    bootstrap-servers: 172.23.122.211:32776,172.23.122.211:32777,172.23.122.211:32778
     #生产者
     producer:
       retries: 0
