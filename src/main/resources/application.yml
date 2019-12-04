@@ -6,7 +6,7 @@ server:
       timeout: 30
 rocketmq:
   # 指定namesrv地址
-  namesrvAddr: localhost:9876
+  namesrvAddr: 172.23.122.211:9876;172.23.122.211:9877
   #生产者group名称
   producerGroupName: producerGroupName
   #事务生产者group名称
@@ -25,7 +25,7 @@ rocketmq:
       topic: AFC-FLOW
       tags: book
       # 指定namesrv地址
-      namesrvAddr: localhost:9876
+      namesrvAddr: 172.23.122.211:9876;172.23.122.211:9877
       #广播消费
       consumerBroadCasting: false
       #一次最大消费多少数量消息
@@ -38,7 +38,7 @@ rocketmq:
       topic: CCTV-FLOW
       tags: book
       # 指定namesrv地址
-      namesrvAddr: localhost:9876
+      namesrvAddr: 172.23.122.211:9876;172.23.122.211:9877
       #广播消费
       consumerBroadCasting: false
       #一次最大消费多少数量消息
