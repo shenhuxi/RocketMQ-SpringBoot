@@ -20,8 +20,13 @@ public class TestRocketMQSendController {
     public boolean createMessage() {
         log.info("创建一个用户消息开始...........");
         User user = new User("jardon", 18);
-        ProduceMessage produceMessage = new ProduceMessage("AFC-FLOW", "book", JSONObject.toJSONString(user));
-        return produceMessageService.produceMessage(produceMessage);
+        ProduceMessage produceMessage = new ProduceMessage("broker-a", "book", JSONObject.toJSONString(user));
+        produceMessageService.produceMessage(produceMessage);
+        produceMessage = new ProduceMessage("broker-b", "book", JSONObject.toJSONString(user));
+        produceMessageService.produceMessage(produceMessage);
+        produceMessage = new ProduceMessage("broker-c", "book", JSONObject.toJSONString(user));
+        produceMessageService.produceMessage(produceMessage);
+        return true;
     }
 }
 

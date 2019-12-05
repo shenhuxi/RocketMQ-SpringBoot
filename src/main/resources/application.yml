@@ -6,7 +6,7 @@ server:
       timeout: 30
 rocketmq:
   # 指定namesrv地址
-  namesrvAddr: 172.23.122.211:9876;172.23.122.211:9877
+  namesrvAddr: 172.23.122.211:9877;172.23.122.211:9876
   #生产者group名称
   producerGroupName: producerGroupName
   #事务生产者group名称
@@ -22,28 +22,17 @@ rocketmq:
     - name: AFC-FLOW
       enable: true
       groupName: PCI-MICS
-      topic: AFC-FLOW
-      tags: book
+      topic: broker-a~*;broker-b~*;broker-c~*
       # 指定namesrv地址
-      namesrvAddr: 172.23.122.211:9876;172.23.122.211:9877
+      namesrvAddr: 172.23.122.211:9876
       #广播消费
       consumerBroadCasting: false
       #一次最大消费多少数量消息
       consumerBatchMaxSize: 1
       #启动顺序消费
       enableOrderConsumer: false
-    - name: CCTV-FLOW
-      enable: true
-      groupName: CCTV-FLOW
-      topic: CCTV-FLOW
-      tags: book
-      # 指定namesrv地址
-      namesrvAddr: 172.23.122.211:9876;172.23.122.211:9877
-      #广播消费
-      consumerBroadCasting: false
-      #一次最大消费多少数量消息
-      consumerBatchMaxSize: 1
-      #启动顺序消费
-      enableOrderConsumer: false
+      consumeThreadMin: 20
+      consumeThreadMax: 64
+
 
 
