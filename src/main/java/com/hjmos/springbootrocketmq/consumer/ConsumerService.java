@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class ConsumerService {
-    @EventListener(condition = "#event.msgs[0].topic=='user-topic' && #event.msgs[0].tags=='white'")
+//    @EventListener(condition = "#event.msgs[0].topic=='user-topic' && #event.msgs[0].tags=='white'")
     public void rocketmqMsgListener(MessageEvent event) {
         try {
             List<MessageExt> msgs = event.getMsgs();
@@ -25,28 +25,41 @@ public class ConsumerService {
         }
     }
 
-    @EventListener(condition = "#event.msgs[0].topic=='user-topic2'")
-    public void rocketmqMsgListener2(MessageEvent event) {
+
+    @EventListener(condition = "#event.msgs[0].topic=='my-topic'")
+    public void rocketmqMsgListener3(MessageEvent event) {
         try {
             List<MessageExt> msgs = event.getMsgs();
             for (MessageExt msg : msgs) {
-                System.err.println("线程："+Thread.currentThread().getName()+"，消费主题user-topic2消息:"+new String(msg.getBody())+ "--ID："+msg.getMsgId());
+                System.err.println("线程："+Thread.currentThread().getName()+"，消费主题"+msg.getTopic()+"消息:"+new String(msg.getBody())+ "--ID："+msg.getMsgId());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    @EventListener(condition = "#event.msgs[0].topic=='my-topic'")
+    public void rocketmqMsgListener4(MessageEvent event) {
+        try {
+            List<MessageExt> msgs = event.getMsgs();
+            for (MessageExt msg : msgs) {
+                System.err.println("线程："+Thread.currentThread().getName()+"，消费主题"+msg.getTopic()+"消息:"+new String(msg.getBody())+ "--ID："+msg.getMsgId());
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    @EventListener(condition = "#event.msgs[0].topic=='AFC-FLOW'")
-    public void rocketmqMsgListener3(MessageEvent event){
+    @EventListener(condition = "#event.msgs[0].topic=='my-topic'")
+    public void rocketmqMsgListener5(MessageEvent event) {
         try {
             List<MessageExt> msgs = event.getMsgs();
             for (MessageExt msg : msgs) {
-                System.err.println("线程："+Thread.currentThread().getName()+"，消费消息:"+new String(msg.getBody()));
+                System.err.println("线程："+Thread.currentThread().getName()+"，消费主题"+msg.getTopic()+"消息:"+new String(msg.getBody())+ "--ID："+msg.getMsgId());
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
 
 }

@@ -10,6 +10,9 @@ import javax.validation.constraints.NotBlank;
 /**
  * @author yuyang
  * 封装消息实体
+ * ① 稳定性
+ * ② 高可用
+ * ③ 数据完整性
  */
 @Getter
 @Setter

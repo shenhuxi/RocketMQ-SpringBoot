@@ -7,11 +7,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * 本类只用于测试服务，实际不存在
  */
 @RestController()
 @Slf4j
+@RequestMapping("/TestRocketMQSend")
 public class TestRocketMQSendController {
     @Autowired
     private ProduceMessageService produceMessageService;
@@ -19,9 +23,17 @@ public class TestRocketMQSendController {
     @GetMapping("/createMessage")
     public boolean createMessage() {
         log.info("创建一个用户消息开始...........");
-        User user = new User("jardon", 18);
-        ProduceMessage produceMessage = new ProduceMessage("AFC-FLOW", "book", JSONObject.toJSONString(user));
-        return produceMessageService.produceMessage(produceMessage);
+        List<User> list = new ArrayList<>();
+
+        for(int i = 0;i< 1000000;i++){
+            list.add(new User("jardon"+"-"+i, i));
+        }
+
+        list.parallelStream().forEach(u->{
+            produceMessageService.produceMessage(new ProduceMessage("my-topic","aa",JSONObject.toJSONString(u)));
+        });
+
+        return true;
     }
 }
 
