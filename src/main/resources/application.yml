@@ -59,7 +59,7 @@ spring:
       # 指定消息key和消息体的编解码方式
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
-
+      acks: -1
     #消费者
     consumer:
       group-id: program_A_consumer_group
