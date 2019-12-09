@@ -6,7 +6,7 @@ server:
       timeout: 30
 rocketmq:
   # 指定namesrv地址
-  namesrvAddr: 172.23.122.211:9877;172.23.122.211:9876
+  namesrvAddr: 172.23.122.211:9876
   #生产者group名称
   producerGroupName: producerGroupName
   #事务生产者group名称
@@ -22,7 +22,7 @@ rocketmq:
     - name: AFC-FLOW
       enable: true
       groupName: PCI-MICS
-      topic: broker-a~*;broker-b~*;broker-c~*
+      topic: broker-a~*;broker-b~*;broker-c~*;T5~*
       # 指定namesrv地址
       namesrvAddr: 172.23.122.211:9876
       #广播消费

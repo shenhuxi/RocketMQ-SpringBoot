@@ -52,9 +52,9 @@ public class ProduceMessageServiceImpl implements ProduceMessageService {
         @NotBlank String content = produceMessage.getContent();
         @NotBlank String tag = produceMessage.getTag();
         String keys = produceMessage.getKeys();
-        if (!verifyJson(content)) {
-            throw new MqSendException("消息内容不是json格式");
-        }
+//        if (!verifyJson(content)) {
+//            throw new MqSendException("消息内容不是json格式");
+//        }
 
         try {
             sendMsg(topic, tag, keys, content);
@@ -136,7 +136,7 @@ public class ProduceMessageServiceImpl implements ProduceMessageService {
     private SendResult sendMsg(String topic, String tags, String keys, String content) throws Exception {
         Message msg = new Message(topic, tags, keys, content.getBytes());
         SendResult result = defaultProducer.send(msg);
-        this.logMsg(msg, result);
+        //this.logMsg(msg, result);
         return result;
     }
 
@@ -161,7 +161,7 @@ public class ProduceMessageServiceImpl implements ProduceMessageService {
                     return mqs.get(index);
                 }
                 , orderId);
-        this.logMsg(msg, sendResult);
+        //this.logMsg(msg, sendResult);
         return sendResult;
     }
 
