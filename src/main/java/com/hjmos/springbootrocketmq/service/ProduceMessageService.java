@@ -1,6 +1,7 @@
 package com.hjmos.springbootrocketmq.service;
 
 import com.hjmos.springbootrocketmq.entity.ProduceMessage;
+import org.apache.rocketmq.client.exception.MQClientException;
 
 /**
  * @author yuyang
@@ -13,4 +14,6 @@ public interface ProduceMessageService {
      * @return
      */
     boolean produceMessage(ProduceMessage produceMessage);
+
+    boolean transactionMQ(ProduceMessage produceMessage) throws MQClientException;
 }

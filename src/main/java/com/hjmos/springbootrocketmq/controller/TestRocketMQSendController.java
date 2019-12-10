@@ -5,6 +5,7 @@ import com.hjmos.springbootrocketmq.entity.ProduceMessage;
 import com.hjmos.springbootrocketmq.service.ProduceMessageService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.rocketmq.client.exception.MQClientException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -47,6 +48,13 @@ public class TestRocketMQSendController {
                 }
             });
         }).start();
+        return true;
+    }
+
+    @GetMapping("/transactionMQ")
+    public boolean transactionMQ() throws MQClientException {
+        log.info("创建一个事务消息开始...........");
+        produceMessageService.transactionMQ(new ProduceMessage("T5", "Transaction_rollback", "Test RocketMQ Transaction is OK？"));
         return true;
     }
 }

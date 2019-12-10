@@ -6,6 +6,7 @@ import com.hjmos.springbootrocketmq.entity.ProduceMessage;
 import com.hjmos.springbootrocketmq.exception.MqSendException;
 import com.hjmos.springbootrocketmq.service.ProduceMessageService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.rocketmq.client.exception.MQClientException;
 import org.apache.rocketmq.client.producer.*;
 import org.apache.rocketmq.common.message.Message;
 import org.apache.rocketmq.common.message.MessageQueue;
@@ -13,6 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import javax.validation.constraints.NotBlank;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import com.hjmos.springbootrocketmq.producer.TransactionExecuterImpl;
 
 /**
  * @author yuyang
@@ -39,6 +43,17 @@ public class ProduceMessageServiceImpl implements ProduceMessageService {
     @Override
     public boolean produceMessage(ProduceMessage produceMessage) {
         return produceMessageCore(produceMessage);
+    }
+
+    @Override
+    public boolean transactionMQ(ProduceMessage produceMessage) throws MQClientException {
+        @NotBlank String topic = produceMessage.getTopic();
+        @NotBlank String content = produceMessage.getContent();
+        @NotBlank String tag = produceMessage.getTag();
+        Message msg = new Message(topic, tag, content.getBytes());
+        SendResult sendResult = transactionProducer.sendMessageInTransaction(msg, new TransactionExecuterImpl(),"tq");
+        this.logMsg(msg, sendResult);
+        return true;
     }
 
     /**

@@ -13,8 +13,8 @@ import org.apache.rocketmq.client.consumer.listener.ConsumeOrderlyStatus;
 import org.apache.rocketmq.client.consumer.listener.MessageListenerConcurrently;
 import org.apache.rocketmq.client.consumer.listener.MessageListenerOrderly;
 import org.apache.rocketmq.client.exception.MQClientException;
-import org.apache.rocketmq.client.producer.DefaultMQProducer;
-import org.apache.rocketmq.client.producer.TransactionMQProducer;
+import org.apache.rocketmq.client.producer.*;
+import org.apache.rocketmq.common.message.Message;
 import org.apache.rocketmq.common.message.MessageExt;
 import org.apache.rocketmq.common.protocol.heartbeat.MessageModel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +25,7 @@ import org.springframework.context.annotation.Configuration;
 
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
@@ -96,7 +97,14 @@ public class RocketMqConfiguration {
         // 队列数
         producer.setCheckRequestHoldMax(2000);
         producer.start();
-        log.info("rocketmq transaction producer server is starting....");
+        //服务器回调producer,检查本地事务分支成功还是失败
+        producer.setTransactionCheckListener(new TransactionCheckListener() {
+            @Override
+            public LocalTransactionState checkLocalTransactionState(MessageExt messageExt) {
+                System.out.println("回查监听执行：--" + new String(messageExt.getBody()));
+                return LocalTransactionState.COMMIT_MESSAGE;
+            }
+        });
         return producer;
     }
 }
