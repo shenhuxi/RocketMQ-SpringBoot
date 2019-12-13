@@ -24,7 +24,7 @@ import java.util.List;
  * 生产消息的服务实现
  */
 @Slf4j
-@Service
+//@Service
 public class ProduceMessageServiceImpl implements ProduceMessageService {
     @Autowired
     private DefaultMQProducer defaultProducer;

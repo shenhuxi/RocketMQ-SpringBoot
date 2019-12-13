@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController()
 @Slf4j
 public class TestRocketMQSendController {
-    @Autowired
-    private ProduceMessageService produceMessageService;
+//    @Autowired
+//    private ProduceMessageService produceMessageService;
     @Autowired
     private KafkaProduceMessageService kafkaProduceMessageService;
     @GetMapping("/createRocketMessage")
@@ -26,13 +26,11 @@ public class TestRocketMQSendController {
         log.info("创建一个用户消息开始...........");
         User user = new User("jardon", 18);
         RocketProduceMessage produceMessage = new RocketProduceMessage("AFC-FLOW", "book", JSONObject.toJSONString(user));
-        return produceMessageService.produceMessage(produceMessage);
+        return true;//produceMessageService.produceMessage(produceMessage);
     }
     @GetMapping("/createKafkaMessage")
-    public boolean createKafkaMessage() {
-        log.info("创建一个用户消息开始...........");
-        User user = new User("jardon", 18);
-        KafkaProduceMessage produceMessage = new KafkaProduceMessage("Topic_user", JSONObject.toJSONString(user));
+    public boolean createKafkaMessage(String topic,String content) {
+        KafkaProduceMessage produceMessage = new KafkaProduceMessage(topic,content);
         return kafkaProduceMessageService.produceMessage(produceMessage);
     }
 }

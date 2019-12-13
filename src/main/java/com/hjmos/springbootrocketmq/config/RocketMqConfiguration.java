@@ -31,18 +31,17 @@ import java.util.stream.Collectors;
  * @author yuyang
  * 加载配置信息并初始化
  */
-@Configuration
-@EnableConfigurationProperties(RocketMQProperties.class)
+//@Configuration
+//@EnableConfigurationProperties(RocketMQProperties.class)
 @Slf4j
 public class RocketMqConfiguration {
-
-    @Autowired
+    //@Autowired
     private RocketMQProperties rocketMQProperties;
 
     /**
      * 事件监听
      */
-    @Autowired
+    //Autowired
     private ApplicationEventPublisher publisher = null;
 
     private static boolean isFirstSub = true;
