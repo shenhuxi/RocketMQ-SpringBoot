@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 import java.util.Properties;
-@Component
+//@Component
 public class WordCountStream {
     @SuppressWarnings("unchecked")
     @Bean("app1StreamTopology")
