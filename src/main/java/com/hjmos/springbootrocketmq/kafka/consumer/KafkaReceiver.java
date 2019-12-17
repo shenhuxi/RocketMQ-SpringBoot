@@ -10,12 +10,12 @@ import java.util.Optional;
 @Component
 @Slf4j
 public class KafkaReceiver {
-	@KafkaListener(topics = {"T123"})
+	@KafkaListener(topics = {"T5"})
     public void listen(ConsumerRecord<?, ?> record) {
         Optional<?> kafkaMessage = Optional.ofNullable(record.value());
         if (kafkaMessage.isPresent()) {
             Object message = kafkaMessage.get();
-            log.info("线程="+Thread.currentThread()+"-> kafka消费主题----Topic_user------------- record =" + record+" message =" + message);
+            log.info("线程="+Thread.currentThread()+"-> kafka消费主题【"+record.topic()+" 分区："+record.partition()+ "】"+"record =" + record+"+ message =" + message);
         }
     }
     //--------------------------------------- 主题转发 star---------------------------------------
