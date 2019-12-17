@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -21,12 +22,15 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class TestRocketMQSendController {
     @Autowired
     private ProduceMessageService produceMessageService;
+    static int numb = 0;
+    static long star =0;
 
     @GetMapping("/createMessage")
     public boolean createMessage() {
         log.info("创建一个用户消息开始...........");
-        User user = new User("jardon", 18);
-        ProduceMessage produceMessage = new ProduceMessage("T5", "book", JSONObject.toJSONString(user));
+//        User user = new User("jardon", 18);
+//        JSONObject.toJSONString(user);
+        ProduceMessage produceMessage = new ProduceMessage("T7", "book", RandomStringUtils.random(1));
         produceMessageService.produceMessage(produceMessage);
         return true;
     }
@@ -34,21 +38,33 @@ public class TestRocketMQSendController {
     @GetMapping("/manyRequest")
     public boolean manyRequest() {
         log.info("创建一个用户消息开始...........");
+
+        final long number =100000L;
+        numb = 0;
+
         List<String> list = new ArrayList<>();
-        for (int i = 1; i <= 100000; i++) {
-            list.add(String.valueOf(i));
+        for (int i = 1; i <= number; i++) {
+            list.add(RandomStringUtils.randomAlphanumeric(100));
+            //list.add(String.valueOf(i));
         }
 
         log.info("执行开始："+System.currentTimeMillis());
+        star = System.currentTimeMillis();
         new Thread(() -> {
             list.parallelStream().forEach(u -> {
-                produceMessageService.produceMessage(new ProduceMessage("T5", "aa", u));
-                if(u.equals("100000")){
-                    log.info("执行结束："+System.currentTimeMillis());
-                }
+                produceMessageService.produceMessage(new ProduceMessage("T7", "aa", u));
+                addNumber();
             });
         }).start();
+
+
         return true;
+    }
+    private synchronized void addNumber(){
+        numb = ++numb;
+        if(numb ==100000){
+            log.info("执行结束 吞吐量为："+100000*1000/(System.currentTimeMillis()-star));
+        }
     }
 
     @GetMapping("/transactionMQ")
