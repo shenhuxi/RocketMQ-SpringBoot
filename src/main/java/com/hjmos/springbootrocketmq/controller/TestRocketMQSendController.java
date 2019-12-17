@@ -26,7 +26,7 @@ public class TestRocketMQSendController {
     public boolean createMessage() {
         log.info("创建一个用户消息开始...........");
         User user = new User("jardon", 18);
-        ProduceMessage produceMessage = new ProduceMessage("T4", "book", JSONObject.toJSONString(user));
+        ProduceMessage produceMessage = new ProduceMessage("T5", "book", JSONObject.toJSONString(user));
         produceMessageService.produceMessage(produceMessage);
         return true;
     }
