@@ -47,7 +47,11 @@ rocketmq:
       enableOrderConsumer: false
 
 spring:
-  kafka:
+  outkafka:
+    producer:
+      retries: 0
+
+  skafka:
     # 指定kafka 代理地址，可以多个
     bootstrap-servers: 172.23.122.211:9092,172.23.122.211:9093,172.23.122.211:9094
     #生产者
