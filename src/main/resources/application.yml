@@ -47,9 +47,14 @@ rocketmq:
       enableOrderConsumer: false
 
 spring:
-  outkafka:
-    producer:
-      retries: 0
+  otherkafka:
+    bootstrap-servers: 172.23.122.211:9092,172.23.122.211:9093,172.23.122.211:9094
+    consumer:
+      group-id: program_A_consumer_group
+      enable-auto-commit: true
+      auto-commit-interval: 1000
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
 
   skafka:
     # 指定kafka 代理地址，可以多个

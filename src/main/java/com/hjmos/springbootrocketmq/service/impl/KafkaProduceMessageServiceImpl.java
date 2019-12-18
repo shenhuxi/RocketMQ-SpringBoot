@@ -16,18 +16,29 @@ import java.util.concurrent.ExecutionException;
 public class KafkaProduceMessageServiceImpl implements KafkaProduceMessageService {
     @Autowired
     private KafkaTemplate<String, String> kafkaTemplate;
+    @Autowired
+    private KafkaTemplate<String, String> kafkaTemplateOther;
     @Override
     public boolean produceMessage(KafkaProduceMessage produceMessage) {
         ListenableFuture<SendResult<String, String>> send = kafkaTemplate.send(produceMessage.getTopic(), produceMessage.getContent());
         try {
             SendResult<String, String> stringStringSendResult = send.get();
-            log.info("发送消息成功"+stringStringSendResult.toString());
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
+            log.info("kafkaTemplate发送消息成功"+stringStringSendResult.toString());
+        } catch (InterruptedException |ExecutionException e) {
             e.printStackTrace();
         }
+        return true;
+    }
 
+    @Override
+    public boolean produceMessageOther(KafkaProduceMessage produceMessage) {
+        ListenableFuture<SendResult<String, String>> send = kafkaTemplateOther.send(produceMessage.getTopic(), produceMessage.getContent());
+        try {
+            SendResult<String, String> stringStringSendResult = send.get();
+            log.info("kafkaTemplateOther 发送消息成功"+stringStringSendResult.toString());
+        } catch (InterruptedException |ExecutionException e) {
+            e.printStackTrace();
+        }
         return true;
     }
 }

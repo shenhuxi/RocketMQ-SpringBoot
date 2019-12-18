@@ -14,4 +14,6 @@ public interface KafkaProduceMessageService {
      * @return
      */
     boolean produceMessage(KafkaProduceMessage produceMessage);
+
+    boolean produceMessageOther(KafkaProduceMessage produceMessage);
 }

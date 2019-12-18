@@ -19,30 +19,30 @@ import java.util.Map;
 
 @Configuration
 @EnableKafka
-public class KafkaConfiguration {
-    @Value("${spring.skafka.bootstrap-servers}")
+public class KafkaConfigurationTwo {
+    @Value("${spring.otherkafka.bootstrap-servers}")
     private String innerServers;
-    @Value("${spring.skafka.consumer.group-id}")
+    @Value("${spring.otherkafka.consumer.group-id}")
     private String innerGroupid;
-    @Value("${spring.skafka.consumer.enable-auto-commit}")
+    @Value("${spring.otherkafka.consumer.enable-auto-commit}")
     private String innerEnableAutoCommit;
 
     @Bean
     @Primary//理解为默认优先选择当前容器下的消费者工厂
-    KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<Integer, String>> kafkaListenerContainerFactory() {
+    KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<Integer, String>> kafkaListenerContainerFactoryOther() {
         ConcurrentKafkaListenerContainerFactory<Integer, String> factory = new ConcurrentKafkaListenerContainerFactory<>();
-        factory.setConsumerFactory(consumerFactory());
+        factory.setConsumerFactory(consumerFactoryOther());
         factory.setConcurrency(3);
         factory.getContainerProperties().setPollTimeout(3000);
         return factory;
     }
     @Bean//第一个消费者工厂的bean
-    public ConsumerFactory<Integer, String> consumerFactory() {
-        return new DefaultKafkaConsumerFactory<>(consumerConfigs());
+    public ConsumerFactory<Integer, String> consumerFactoryOther() {
+        return new DefaultKafkaConsumerFactory<>(consumerConfigsOther());
     }
 
     @Bean
-    public Map<String, Object> consumerConfigs() {
+    public Map<String, Object> consumerConfigsOther() {
         Map<String, Object> props = new HashMap<>();
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, innerServers);
         props.put(ConsumerConfig.GROUP_ID_CONFIG, innerGroupid);
@@ -55,15 +55,15 @@ public class KafkaConfiguration {
     }
 
     @Bean //生产者工厂配置
-    public ProducerFactory<String, String> producerFactory() {
-        return new DefaultKafkaProducerFactory<>(senderProps());
+    public ProducerFactory<String, String> producerFactoryOther() {
+        return new DefaultKafkaProducerFactory<>(senderPropsOther());
     }
 
     @Bean //kafka发送消息模板
-    public KafkaTemplate<String, String> kafkaTemplate() {
-        return new KafkaTemplate<String, String>(producerFactory());
+    public KafkaTemplate<String, String> kafkaTemplateOther() {
+        return new KafkaTemplate<String, String>(producerFactoryOther());
     }
-    private Map<String, Object> senderProps() {
+    private Map<String, Object> senderPropsOther() {
         Map<String, Object> props = new HashMap<>();
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, innerServers);
         props.put(ProducerConfig.RETRIES_CONFIG, 0);

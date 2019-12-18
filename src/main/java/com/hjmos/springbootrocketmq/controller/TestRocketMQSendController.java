@@ -33,6 +33,11 @@ public class TestRocketMQSendController {
         KafkaProduceMessage produceMessage = new KafkaProduceMessage(topic,content);
         return kafkaProduceMessageService.produceMessage(produceMessage);
     }
+    @GetMapping("/createKafkaMessageOther")
+    public boolean createKafkaMessageOther(String topic,String content) {
+        KafkaProduceMessage produceMessage = new KafkaProduceMessage(topic,content);
+        return kafkaProduceMessageService.produceMessageOther(produceMessage);
+    }
 }
 
 /**
