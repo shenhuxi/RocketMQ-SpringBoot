@@ -10,6 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 /**
  * 本类只用于测试服务，实际不存在
@@ -32,6 +35,16 @@ public class TestRocketMQSendController {
     public boolean createKafkaMessage(String topic,String content) {
         KafkaProduceMessage produceMessage = new KafkaProduceMessage(topic,content);
         return kafkaProduceMessageService.produceMessage(produceMessage);
+    }
+    @GetMapping("/batchKafkaMessage")
+    public boolean createKafkaMessageBatch(String topic,String content) {
+        List<KafkaProduceMessage> list = new ArrayList<>();
+        KafkaProduceMessage produceMessage;
+        for (int i = 0; i < 12; i++) {
+            produceMessage = new KafkaProduceMessage(topic,content+i);
+            list.add(produceMessage);
+        }
+        return kafkaProduceMessageService.produceBatchMessage(list);
     }
 }
 

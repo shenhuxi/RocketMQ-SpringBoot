@@ -3,6 +3,8 @@ package com.hjmos.springbootrocketmq.service;
 import com.hjmos.springbootrocketmq.entity.KafkaProduceMessage;
 import com.hjmos.springbootrocketmq.entity.RocketProduceMessage;
 
+import java.util.List;
+
 /**
  * @author yuyang
  * 生产消息的服务接口
@@ -14,4 +16,11 @@ public interface KafkaProduceMessageService {
      * @return
      */
     boolean produceMessage(KafkaProduceMessage produceMessage);
+
+    /**
+     * 生产批量消息
+     * @param produceMessage
+     * @return
+     */
+    boolean produceBatchMessage(List<KafkaProduceMessage> produceMessage);
 }
