@@ -24,8 +24,6 @@ public class ConsumerService {
             e.printStackTrace();
         }
     }
-
-
     @EventListener(condition = "#event.msgs[0].topic=='my-topic'")
     public void rocketmqMsgListener3(MessageEvent event) {
         try {
@@ -37,29 +35,7 @@ public class ConsumerService {
             e.printStackTrace();
         }
     }
-    @EventListener(condition = "#event.msgs[0].topic=='my-topic'")
-    public void rocketmqMsgListener4(MessageEvent event) {
-        try {
-            List<MessageExt> msgs = event.getMsgs();
-            for (MessageExt msg : msgs) {
-                System.err.println("线程："+Thread.currentThread().getName()+"，消费主题"+msg.getTopic()+"消息:"+new String(msg.getBody())+ "--ID："+msg.getMsgId());
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
-    @EventListener(condition = "#event.msgs[0].topic=='my-topic'")
-    public void rocketmqMsgListener5(MessageEvent event) {
-        try {
-            List<MessageExt> msgs = event.getMsgs();
-            for (MessageExt msg : msgs) {
-                System.err.println("线程："+Thread.currentThread().getName()+"，消费主题"+msg.getTopic()+"消息:"+new String(msg.getBody())+ "--ID："+msg.getMsgId());
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
 
 }

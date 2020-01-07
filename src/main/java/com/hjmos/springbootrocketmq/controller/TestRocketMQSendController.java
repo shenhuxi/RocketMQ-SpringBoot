@@ -19,6 +19,12 @@ import java.util.List;
 public class TestRocketMQSendController {
     @Autowired
     private ProduceMessageService produceMessageService;
+    @GetMapping("/create")
+    public boolean createMessage1(String content ) {
+        log.info("创建一个用户消息开始...........");
+        produceMessageService.produceMessage(new ProduceMessage("my-topic","aa",content));
+        return true;
+    }
 
     @GetMapping("/createMessage")
     public boolean createMessage() {

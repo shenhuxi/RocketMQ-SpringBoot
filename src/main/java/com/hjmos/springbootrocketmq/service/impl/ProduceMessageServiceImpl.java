@@ -52,9 +52,9 @@ public class ProduceMessageServiceImpl implements ProduceMessageService {
         @NotBlank String content = produceMessage.getContent();
         @NotBlank String tag = produceMessage.getTag();
         String keys = produceMessage.getKeys();
-        if (!verifyJson(content)) {
+       /* if (!verifyJson(content)) {
             throw new MqSendException("消息内容不是json格式");
-        }
+        }*/
 
         try {
             sendMsg(topic, tag, keys, content);
