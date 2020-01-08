@@ -1,6 +1,8 @@
 package com.hjmos.springbootrocketmq.service;
 
 import com.hjmos.springbootrocketmq.entity.ProduceMessage;
+import org.apache.rocketmq.client.exception.MQClientException;
+import org.apache.rocketmq.client.producer.SendResult;
 
 /**
  * @author yuyang
@@ -13,4 +15,19 @@ public interface ProduceMessageService {
      * @return
      */
     boolean produceMessage(ProduceMessage produceMessage);
+
+    /**
+     * 发送同步消息
+     * @param produceMessage
+     */
+    SendResult sendSyncMsg(ProduceMessage produceMessage) throws Exception;
+
+    void sendAsyncMsg(ProduceMessage produceMessage) throws Exception;
+
+    void sendOneWayMsg(ProduceMessage produceMessage) throws Exception;
+
+    SendResult sendTransactionMsg(ProduceMessage produceMessage) throws Exception;
+
+    SendResult sendMsgOrder(ProduceMessage produceMessage,int orderId) throws Exception;
+
 }
