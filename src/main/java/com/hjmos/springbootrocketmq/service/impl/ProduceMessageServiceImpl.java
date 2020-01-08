@@ -6,6 +6,7 @@ import com.hjmos.springbootrocketmq.entity.ProduceMessage;
 import com.hjmos.springbootrocketmq.exception.MqSendException;
 import com.hjmos.springbootrocketmq.service.ProduceMessageService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.rocketmq.client.exception.MQClientException;
 import org.apache.rocketmq.client.producer.*;
 import org.apache.rocketmq.common.message.Message;
 import org.apache.rocketmq.common.message.MessageQueue;
@@ -165,6 +166,88 @@ public class ProduceMessageServiceImpl implements ProduceMessageService {
         return sendResult;
     }
 
+    private Message createMessage(ProduceMessage produceMessage) {
+        @NotBlank String topic = produceMessage.getTopic();
+        @NotBlank String content = produceMessage.getContent();
+        @NotBlank String tag = produceMessage.getTag();
+        String keys = produceMessage.getKeys();
+        return new Message(topic, tag, keys, content.getBytes());
+    }
+
+    /**
+     * 发送同步消息
+     * @param produceMessage
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public SendResult sendSyncMsg(ProduceMessage produceMessage) throws Exception {
+        Message msg = createMessage(produceMessage);
+        SendResult result = defaultProducer.send(msg);
+        this.logMsg(msg, result);
+        return result;
+    }
+
+    /**
+     * 异步发送 默认回调函数
+     *@param produceMessage
+     *@throws Exception
+     */
+    public void sendAsyncMsg(ProduceMessage produceMessage) throws Exception {
+        Message msg = createMessage(produceMessage);
+        defaultProducer.send(msg, rocketSendCallback);
+        this.logMsg(msg);
+    }
+
+    /**
+     * 发送单向消息
+     * @param produceMessage
+     * @throws Exception
+     */
+    @Override
+    public void sendOneWayMsg(ProduceMessage produceMessage) throws Exception {
+        Message msg = createMessage(produceMessage);
+        defaultProducer.sendOneway(msg);
+        defaultProducer.send(msg, (queues, message, queNum) -> {
+            int queueNum = Integer.parseInt(queNum.toString());
+            return queues.get(queueNum);
+        }, 0);
+        this.logMsg(msg);
+    }
+
+    /**
+     * 发送事务消息
+     * @param produceMessage
+     * @return
+     * @throws MQClientException
+     */
+    @Override
+    public SendResult sendTransactionMsg(ProduceMessage produceMessage) throws MQClientException {
+        Message msg = createMessage(produceMessage);
+        SendResult sendResult = transactionProducer.sendMessageInTransaction(msg, null);
+        this.logMsg(msg, sendResult);
+        return sendResult;
+    }
+
+    /**
+     * 发送顺序消息
+     * @param produceMessage
+     * @param orderId
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public SendResult sendMsgOrder(ProduceMessage produceMessage,int orderId) throws Exception {
+        Message msg = createMessage(produceMessage);
+        SendResult sendResult = defaultProducer.send(msg, (List<MessageQueue> mqs, Message message, Object arg) -> {
+                    Integer id = (Integer) arg;
+                    int index = id % mqs.size();
+                    return mqs.get(index);
+                }
+                , orderId);
+        this.logMsg(msg, sendResult);
+        return sendResult;
+    }
 
     /**
      * 打印消息topic等参数方便后续查找问题
