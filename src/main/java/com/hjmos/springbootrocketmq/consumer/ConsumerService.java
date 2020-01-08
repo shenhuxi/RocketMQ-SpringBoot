@@ -36,6 +36,20 @@ public class ConsumerService {
         }
     }
 
+    @EventListener(condition = "#event.msgs[0].topic=='orderTopic'")
+    public void receiveOrderMessage(MessageEvent event){
+
+        try {
+            List<MessageExt> msgs = event.getMsgs();
+            for (MessageExt msg : msgs) {
+                System.out.println("线程名称：【"+Thread.currentThread().getName()+"】，"+new String(msg.getBody()));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
 
 
 }
