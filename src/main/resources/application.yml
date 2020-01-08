@@ -8,7 +8,7 @@ server:
 #  rocketmq 相关配置
 rocketmq:
   # 指定namesrv地址
-  namesrvAddr: 172.23.122.154:9876
+  namesrvAddr: 192.168.236.130:9876
   #生产者group名称
   producerGroupName: producerGroupName
   #事务生产者group名称
@@ -27,20 +27,20 @@ rocketmq:
       topic: my-topic
       tags: aa
       # 指定namesrv地址
-      namesrvAddr: 172.23.122.154:9876
+      namesrvAddr: 192.168.236.130:9876
       #广播消费
       consumerBroadCasting: false
       #一次最大消费多少数量消息
       consumerBatchMaxSize: 1
       #启动顺序消费
       enableOrderConsumer: false
-    - name: FAS
+    - name: ORDER
       enable: true
-      groupName: FAS
-      topic: my-topic
+      groupName: ORDER
+      topic: orderTopic
       tags: aa
       # 指定namesrv地址
-      namesrvAddr: 172.23.122.154:9876
+      namesrvAddr: 192.168.236.130:9876
       #广播消费
       consumerBroadCasting: false
       #一次最大消费多少数量消息
