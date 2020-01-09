@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 8088
   servlet:
     context-path: /mq
     session:
@@ -34,6 +34,7 @@ rocketmq:
       consumerBatchMaxSize: 1
       #启动顺序消费
       enableOrderConsumer: false
+
     - name: FAS
       enable: true
       groupName: FAS
@@ -47,33 +48,3 @@ rocketmq:
       consumerBatchMaxSize: 1
       #启动顺序消费
       enableOrderConsumer: false
-# kafka相关配置
-spring:
-  kafka:
-    # 指定kafka 代理地址，可以多个
-    bootstrap-servers: 127.0.0.1:9092
-    # ------------------生产者配置-------------------------
-    producer:
-      retries: 0
-      # 等待所有副本节点的应答，1：只要有一个应答成功，当前消息就可以暴露给消费者,all:全部应答成功
-      acks: 1
-      # 每次批量发送消息的数量
-      batch-size: 16384
-      # 缓存数据大小
-      buffer-memory: 33554432
-      # 指定消息key和消息value的编解码方式
-      key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.apache.kafka.common.serialization.StringSerializer
-
-    # ------------------消费者配置-------------------------
-    consumer:
-      # 消费者组
-#      group-id: test-consumer-group
-      auto-offset-reset: earliest
-      # 是否自动确认offset
-      enable-auto-commit: true
-      # 自动确认offset的时间间隔
-      auto-commit-interval: 100
-      # 指定消息key和消息体的编解码方式
-      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
