@@ -2,22 +2,42 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+    <repositories>
+        <repository>
+            <id>repo-snapshot</id>
+            <url>http://10.38.2.12:30081/repository/maven-snapshots/</url>
+        </repository>
+        <repository>
+            <id>repo-release</id>
+            <url>http://10.38.2.12:30081/repository/maven-releases/</url>
+        </repository>
+    </repositories>
     <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.1.1.RELEASE</version>
-        <relativePath/> <!-- lookup parent from repository -->
+        <groupId>com.pci.hjmos</groupId>
+        <artifactId>service-parent</artifactId>
+        <version>1.0.1</version>
     </parent>
-    <groupId>com.hjmos</groupId>
+
+    <groupId>com.pci.hjmos</groupId>
     <artifactId>springboot-rocketmq</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-    <name>springboot-rocketmq</name>
+    <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
-    <description>Demo project for Spring Boot</description>
+
+    <name>springboot-rocketmq</name>
+    <description>消息中间件API开发</description>
 
     <properties>
         <java.version>1.8</java.version>
     </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <dependencies>
         <dependency>
@@ -30,44 +50,25 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter</artifactId>
-        </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
-        <dependency>
-            <groupId> org.aspectj</groupId >
-            <artifactId> aspectjweaver</artifactId >
-            <version> 1.8.7</version >
-        </dependency>
+
         <!-- RocketMq客户端相关依赖 -->
         <dependency>
             <groupId>org.apache.rocketmq</groupId>
             <artifactId>rocketmq-client</artifactId>
             <version>4.3.2</version>
         </dependency>
-
         <dependency>
             <groupId>org.apache.rocketmq</groupId>
             <artifactId>rocketmq-common</artifactId>
             <version>4.3.2</version>
         </dependency>
-
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>27.0.1-jre</version>
-        </dependency>
-        <!-- kafka -->
-        <dependency>
-            <groupId>org.springframework.kafka</groupId>
-            <artifactId>spring-kafka</artifactId>
-        </dependency>
     </dependencies>
+
 
     <build>
         <plugins>
@@ -104,6 +105,5 @@
             </plugin>
         </plugins>
     </build>
-
 
 </project>
