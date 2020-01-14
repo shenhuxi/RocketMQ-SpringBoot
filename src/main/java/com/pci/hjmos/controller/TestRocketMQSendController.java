@@ -1,11 +1,9 @@
 package com.hjmos.springbootrocketmq.controller;
 
 import com.alibaba.fastjson.JSONObject;
-import com.hjmos.springbootrocketmq.entity.OrderStep;
-import com.hjmos.springbootrocketmq.entity.ProduceMessage;
-import com.hjmos.springbootrocketmq.service.ProduceMessageService;
+import com.hjmos.springbootrocketmq.util.entity.ProduceMessage;
+import com.hjmos.springbootrocketmq.rocketmqservice.ProduceMessageService;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.rocketmq.client.exception.MQClientException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -63,19 +61,6 @@ public class TestRocketMQSendController {
         return "成功发送一条事务消息";
     }
 
-    @GetMapping("/sendMsgOrder")
-    public String sendMsgOrder() throws Exception {
-        log.info("发送顺序消息...........");
-
-        List<OrderStep> orderSteps = OrderStep.buildOrdes();
-        for (int i = 0; i < orderSteps.size(); i++) {
-            String body = orderSteps.get(i)+"";
-            System.out.println((int)orderSteps.get(i).getOrderId());
-            produceMessageService.sendMsgOrder(
-                    new ProduceMessage("orderTopic","aa",body), (int)orderSteps.get(i).getOrderId());
-        }
-        return "成功发送顺序消息";
-    }
 }
 
 /**

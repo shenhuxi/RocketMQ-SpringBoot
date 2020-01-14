@@ -3,7 +3,7 @@ package com.hjmos.springbootrocketmq.consumer;
 import java.util.List;
 
 
-import com.hjmos.springbootrocketmq.bean.MessageEvent;
+import com.hjmos.springbootrocketmq.util.bean.MessageEvent;
 import org.apache.rocketmq.common.message.MessageExt;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;

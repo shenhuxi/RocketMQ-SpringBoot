@@ -1,4 +1,4 @@
-package com.hjmos.springbootrocketmq.enums;
+package com.hjmos.springbootrocketmq.util.enums;
 
 public enum TransactionEnum {
     YES(1, "是"),
