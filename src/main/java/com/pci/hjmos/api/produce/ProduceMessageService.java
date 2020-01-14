@@ -1,5 +1,6 @@
 package com.pci.hjmos.api.produce;
 
+import com.pci.hjmos.util.entity.Result;
 import org.apache.rocketmq.client.producer.SendCallback;
 import org.apache.rocketmq.client.producer.SendResult;
 
@@ -13,7 +14,8 @@ public interface ProduceMessageService {
      * @param topic 消息主题
      * @param content 消息内容
      */
-    SendResult sendSyncMsg(String topic,String content) throws Exception;
+    Result sendSyncMsg(String topic, String content) throws Exception;
+
     /**
      * 发送同步消息
      * @param topic 消息主题

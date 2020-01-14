@@ -1,6 +1,7 @@
 package com.pci.hjmos.rocketmqservice;
 
 import com.pci.hjmos.api.produce.ProduceMessageService;
+import com.pci.hjmos.util.entity.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.client.producer.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,7 @@ public class RocketProduceMessageServiceImpl implements ProduceMessageService {
      * @param content 消息内容
      */
     @Override
-    public SendResult sendSyncMsg(String topic, String content) throws Exception {
+    public Result sendSyncMsg(String topic, String content) throws Exception {
         return null;
     }
 
