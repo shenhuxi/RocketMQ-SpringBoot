@@ -15,15 +15,13 @@ import javax.validation.constraints.NotBlank;
 @Setter
 @ToString
 public class SendResult {
-    /**
-     * 主题
-     * @return
+    /** 主题
+     *
      */
     @NotBlank
     private String topic;
-    /**
-     * 消息内容
-     * @return
+    /** 消息内容
+     *
      */
     @NotBlank
     private String content;

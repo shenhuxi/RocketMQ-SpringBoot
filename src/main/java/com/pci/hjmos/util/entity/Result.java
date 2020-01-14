@@ -1,19 +1,25 @@
 package com.pci.hjmos.util.entity;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
+@Getter
+@Setter
+@ToString
 public class Result {
     /**
-     * 状态码 200：成功，500：失败
+     * code 状态码 200：成功，500：失败
      */
-    int  code;
+    public int  code;
 
     /**
      * 提示信息
      */
-    String msg ;
+    public String msg ;
 
     /**
      * 消息反馈
      */
-    SendResult content;
+    private SendResult content;
 }
