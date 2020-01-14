@@ -8,11 +8,8 @@ import lombok.ToString;
 import javax.validation.constraints.NotBlank;
 
 /**
- * @author yuyang
+ * @author zengpeng
  * 封装消息实体
- * ① 稳定性
- * ② 高可用
- * ③ 数据完整性
  */
 @Getter
 @Setter
@@ -24,14 +21,6 @@ public class SendResult {
      */
     @NotBlank
     private String topic;
-
-    /**
-     * 标签
-     * @return
-     */
-    @NotBlank
-    private String tag;
-
     /**
      * 消息内容
      * @return
@@ -39,21 +28,8 @@ public class SendResult {
     @NotBlank
     private String content;
 
-    /**
-     *
-     * @return
-     */
-    private String keys;
-
-    /**
-     * 支持顺序
-     * @return
-     */
-    private int orderId;
-
-    public SendResult(@NotBlank String topic, @NotBlank String tag, @NotBlank String content) {
+    public SendResult(@NotBlank String topic,  @NotBlank String content) {
         this.topic = topic;
-        this.tag = tag;
         this.content = content;
     }
 

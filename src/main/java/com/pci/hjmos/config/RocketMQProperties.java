@@ -1,4 +1,4 @@
-package com.pci.hjmos.util.entity;
+package com.pci.hjmos.config;
 
 import lombok.Getter;
 import lombok.Setter;
