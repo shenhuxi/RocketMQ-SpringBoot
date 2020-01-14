@@ -1,4 +1,4 @@
-package com.hjmos.springbootrocketmq;
+package com.pci.hjmos;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

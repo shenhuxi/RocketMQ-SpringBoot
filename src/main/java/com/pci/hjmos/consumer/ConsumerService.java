@@ -1,9 +1,9 @@
-package com.hjmos.springbootrocketmq.consumer;
+package com.pci.hjmos.consumer;
 
 import java.util.List;
 
 
-import com.hjmos.springbootrocketmq.util.bean.MessageEvent;
+import com.pci.hjmos.util.bean.MessageEvent;
 import org.apache.rocketmq.common.message.MessageExt;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;

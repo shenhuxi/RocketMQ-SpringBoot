@@ -1,4 +1,4 @@
-package com.pci.hjmos.rocketmqservice;
+package com.pci.hjmos.kafkaservice;
 
 import com.pci.hjmos.api.produce.ProduceMessageService;
 import lombok.extern.slf4j.Slf4j;

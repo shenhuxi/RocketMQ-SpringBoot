@@ -1,4 +1,4 @@
-package com.hjmos.springbootrocketmq.api.produce;
+package com.pci.hjmos.api.produce;
 
 import org.apache.rocketmq.client.producer.SendCallback;
 import org.apache.rocketmq.client.producer.SendResult;

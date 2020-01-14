@@ -1,4 +1,4 @@
-package com.hjmos.springbootrocketmq.util.entity;
+package com.pci.hjmos.util.entity;
 
 import lombok.Getter;
 import lombok.Setter;

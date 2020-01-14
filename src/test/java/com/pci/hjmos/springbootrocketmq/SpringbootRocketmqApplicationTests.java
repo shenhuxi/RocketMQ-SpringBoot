@@ -1,4 +1,4 @@
-package com.hjmos.springbootrocketmq;
+package com.pci.hjmos.springbootrocketmq;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

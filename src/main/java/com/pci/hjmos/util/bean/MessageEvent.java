@@ -1,4 +1,4 @@
-package com.hjmos.springbootrocketmq.util.bean;
+package com.pci.hjmos.util.bean;
 
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
 import org.apache.rocketmq.common.message.MessageExt;
