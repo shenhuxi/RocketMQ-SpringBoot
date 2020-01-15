@@ -24,6 +24,7 @@ public class ConsumerService {
             e.printStackTrace();
         }
     }
+
     @EventListener(condition = "#event.msgs[0].topic=='my-topic'")
     public void rocketmqMsgListener3(MessageEvent event) {
         try {
