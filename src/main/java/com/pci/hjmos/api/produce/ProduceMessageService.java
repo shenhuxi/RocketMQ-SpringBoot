@@ -22,6 +22,6 @@ public interface ProduceMessageService {
      * @param content 消息内容
      * @param callback 回调方法对象
      */
-    void sendAsyncMsg(String topic, String content, SendCallback callback) throws Exception;
+    void sendAsyncMsg(String topic, String content, MQCallback callback) throws Exception;
 
 }
