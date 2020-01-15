@@ -1,10 +1,9 @@
-package com.hjmos.springbootrocketmq.controller;
+package com.pci.hjmos.controller;
 
 import com.alibaba.fastjson.JSONObject;
-import com.hjmos.springbootrocketmq.entity.KafkaProduceMessage;
-import com.hjmos.springbootrocketmq.entity.RocketProduceMessage;
-import com.hjmos.springbootrocketmq.service.KafkaProduceMessageService;
-import com.hjmos.springbootrocketmq.service.ProduceMessageService;
+import com.pci.hjmos.util.entity.KafkaProduceMessage;
+import com.pci.hjmos.util.entity.RocketProduceMessage;
+import com.pci.hjmos.service.KafkaProduceMessageService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;

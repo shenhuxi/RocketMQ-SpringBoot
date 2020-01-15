@@ -1,4 +1,4 @@
-package com.hjmos.springbootrocketmq.kafka.stream;
+package com.pci.hjmos.kafka.stream;
 
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.common.utils.Bytes;
@@ -10,7 +10,6 @@ import org.apache.kafka.streams.kstream.Materialized;
 import org.apache.kafka.streams.kstream.Produced;
 import org.apache.kafka.streams.state.KeyValueStore;
 import org.springframework.context.annotation.Bean;
-import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 import java.util.Properties;

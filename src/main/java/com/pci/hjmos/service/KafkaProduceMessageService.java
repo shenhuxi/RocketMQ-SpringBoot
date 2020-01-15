@@ -1,7 +1,6 @@
-package com.hjmos.springbootrocketmq.service;
+package com.pci.hjmos.service;
 
-import com.hjmos.springbootrocketmq.entity.KafkaProduceMessage;
-import com.hjmos.springbootrocketmq.entity.RocketProduceMessage;
+import com.pci.hjmos.util.entity.KafkaProduceMessage;
 
 import java.util.List;
 

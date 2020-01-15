@@ -1,4 +1,4 @@
-package com.hjmos.springbootrocketmq.kafka.stream;
+package com.pci.hjmos.kafka.stream;
 
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.common.utils.Bytes;

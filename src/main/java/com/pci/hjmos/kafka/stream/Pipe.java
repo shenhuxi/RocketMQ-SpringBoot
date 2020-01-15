@@ -1,6 +1,5 @@
-package com.hjmos.springbootrocketmq.kafka.stream;
+package com.pci.hjmos.kafka.stream;
 
-import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.StreamsBuilder;

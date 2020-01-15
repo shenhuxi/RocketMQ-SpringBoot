@@ -1,7 +1,7 @@
-package com.hjmos.springbootrocketmq.service.impl;
+package com.pci.hjmos.service.impl;
 
-import com.hjmos.springbootrocketmq.entity.KafkaProduceMessage;
-import com.hjmos.springbootrocketmq.service.KafkaProduceMessageService;
+import com.pci.hjmos.util.entity.KafkaProduceMessage;
+import com.pci.hjmos.service.KafkaProduceMessageService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;

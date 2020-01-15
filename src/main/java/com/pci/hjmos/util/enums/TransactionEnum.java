@@ -1,4 +1,4 @@
-package com.pci.hjmos.enums;
+package com.pci.hjmos.util.enums;
 
 public enum TransactionEnum {
     YES(1, "是"),
