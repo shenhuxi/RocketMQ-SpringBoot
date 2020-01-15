@@ -3,7 +3,6 @@ package com.pci.hjmos.config;
 import javax.annotation.PostConstruct;
 
 import com.pci.hjmos.util.bean.MessageEvent;
-import com.pci.hjmos.util.entity.RocketMQProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
 import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyContext;
