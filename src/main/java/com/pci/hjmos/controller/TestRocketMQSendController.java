@@ -3,7 +3,7 @@ package com.pci.hjmos.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.pci.hjmos.util.entity.KafkaProduceMessage;
 import com.pci.hjmos.util.entity.RocketProduceMessage;
-import com.pci.hjmos.service.KafkaProduceMessageService;
+import com.pci.hjmos.kafka.service.KafkaProduceMessageService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;

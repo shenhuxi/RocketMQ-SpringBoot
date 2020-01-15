@@ -1,4 +1,4 @@
-package com.pci.hjmos.service;
+package com.pci.hjmos.kafka.service;
 
 import com.pci.hjmos.util.entity.KafkaProduceMessage;
 

@@ -1,7 +1,7 @@
-package com.pci.hjmos.service.impl;
+package com.pci.hjmos.kafka.service.impl;
 
 import com.pci.hjmos.util.entity.KafkaProduceMessage;
-import com.pci.hjmos.service.KafkaProduceMessageService;
+import com.pci.hjmos.kafka.service.KafkaProduceMessageService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
