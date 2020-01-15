@@ -1,5 +1,6 @@
 package com.pci.hjmos.config;
 
+import com.pci.hjmos.util.bean.MessageEvent;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.producer.ProducerConfig;
@@ -7,7 +8,9 @@ import org.apache.kafka.common.serialization.StringDeserializer;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -28,6 +31,11 @@ public class KafkaConfiguration {
     private String innerGroupid;
     @Value("${spring.skafka.consumer.enable-auto-commit}")
     private String innerEnableAutoCommit;
+    /**
+     * 事件监听
+     */
+    @Autowired
+    private ApplicationEventPublisher publisher = null;
 
     //------------------------------------------- 消费者消费配置 + 非注解监听消费方式 -------------------------------------------
     @Bean
@@ -65,10 +73,10 @@ public class KafkaConfiguration {
             private Logger log = LoggerFactory.getLogger(this.getClass());
             @Override
             public void onMessage(ConsumerRecord<Integer, String> record) {
+                publisher.publishEvent(new MessageEvent(record));
                 log.info("topic.quick.bean receive : " + record.toString());
             }
         });
-
         return new KafkaMessageListenerContainer(consumerFactory(), properties);
     }
     //------------------------------------------- 消费者批量消费配置  -------------------------------------------

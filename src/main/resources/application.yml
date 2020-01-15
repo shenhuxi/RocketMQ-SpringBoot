@@ -1,59 +1,13 @@
 server:
-  port: 8080
+  port: 8088
   servlet:
-    context-path: /rocketmq
+    context-path: /mq
     session:
       timeout: 30
-rocketmq:
-  # 指定namesrv地址
-  namesrvAddr: localhost:9876
-  #生产者group名称
-  producerGroupName: producerGroupName
-  #事务生产者group名称
-  transactionProducerGroupName: order
-  #生产者实例名称
-  producerInstanceName: user_producer_instance
-  #事务生产者实例名称
-  producerTranInstanceName: user_producer_transacition
-  #启动的时候是否消费历史记录
-  enableHistoryConsumer: false
-  #消费者集合
-  consumerList:
-    - name: AFC-FLOW
-      enable: true
-      groupName: PCI-MICS
-      topic: AFC-FLOW
-      tags: book
-      # 指定namesrv地址
-      namesrvAddr: localhost:9876
-      #广播消费
-      consumerBroadCasting: false
-      #一次最大消费多少数量消息
-      consumerBatchMaxSize: 1
-      #启动顺序消费
-      enableOrderConsumer: false
-    - name: CCTV-FLOW
-      enable: true
-      groupName: CCTV-FLOW
-      topic: CCTV-FLOW
-      tags: book
-      # 指定namesrv地址
-      namesrvAddr: localhost:9876
-      #广播消费
-      consumerBroadCasting: false
-      #一次最大消费多少数量消息
-      consumerBatchMaxSize: 1
-      #启动顺序消费
-      enableOrderConsumer: false
-
 spring:
-  outkafka:
-    producer:
-      retries: 0
-
   skafka:
     # 指定kafka 代理地址，可以多个
-    bootstrap-servers: 172.23.122.211:9092,172.23.122.211:9093,172.23.122.211:9094
+    bootstrap-servers: 172.23.123.57:9092,172.23.123.57:9093,172.23.123.57:9094
     #生产者
     producer:
       retries: 0

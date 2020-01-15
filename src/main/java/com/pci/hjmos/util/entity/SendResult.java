@@ -8,32 +8,29 @@ import lombok.ToString;
 import javax.validation.constraints.NotBlank;
 
 /**
- * @author yuyang
+ * @author zengpeng
  * 封装消息实体
  */
 @Getter
 @Setter
 @ToString
-public class KafkaProduceMessage {
-    /**
-     * 主题
-     * @return
+public class SendResult {
+    /** 主题
+     *
      */
     @NotBlank
-    private String topic;
-
-    /**
-     * 消息内容
-     * @return
+    public String topic;
+    /** 消息内容
+     *
      */
     @NotBlank
-    private String content;
+    public String content;
 
-    public KafkaProduceMessage(@NotBlank String topic, @NotBlank String content) {
+    public SendResult(@NotBlank String topic,  @NotBlank String content) {
         this.topic = topic;
         this.content = content;
     }
 
-    public KafkaProduceMessage() {
+    public SendResult() {
     }
 }

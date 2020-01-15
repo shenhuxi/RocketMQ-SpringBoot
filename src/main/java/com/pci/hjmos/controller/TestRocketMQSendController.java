@@ -1,16 +1,13 @@
 package com.pci.hjmos.controller;
 
-import com.alibaba.fastjson.JSONObject;
-import com.pci.hjmos.util.entity.KafkaProduceMessage;
-import com.pci.hjmos.util.entity.RocketProduceMessage;
-import com.pci.hjmos.kafka.service.KafkaProduceMessageService;
+import com.pci.hjmos.api.produce.ProduceMessageService;
+import com.pci.hjmos.util.entity.Result;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.rocketmq.client.producer.SendCallback;
+import org.apache.rocketmq.client.producer.SendResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
 /**
@@ -20,28 +17,24 @@ import java.util.List;
 @Slf4j
 public class TestRocketMQSendController {
     @Autowired
-    private KafkaProduceMessageService kafkaProduceMessageService;
-    @GetMapping("/createRocketMessage")
-    public boolean createMessage() {
-        log.info("创建一个用户消息开始...........");
-        User user = new User("jardon", 18);
-        RocketProduceMessage produceMessage = new RocketProduceMessage("AFC-FLOW", "book", JSONObject.toJSONString(user));
-        return true;//produceMessageService.produceMessage(produceMessage);
+    private ProduceMessageService kafkaProduceMessageService;
+    @GetMapping("/createKafkaSendSyncMsg")
+    public Result createKafkaMessage(String topic, String content) throws Exception {
+        return kafkaProduceMessageService.sendSyncMsg(topic,content);
     }
-    @GetMapping("/createKafkaMessage")
-    public boolean createKafkaMessage(String topic,String content) {
-        KafkaProduceMessage produceMessage = new KafkaProduceMessage(topic,content);
-        return kafkaProduceMessageService.produceMessage(produceMessage);
-    }
-    @GetMapping("/batchKafkaMessage")
-    public boolean createKafkaMessageBatch(String topic,String content) {
-        List<KafkaProduceMessage> list = new ArrayList<>();
-        KafkaProduceMessage produceMessage;
-        for (int i = 0; i < 12; i++) {
-            produceMessage = new KafkaProduceMessage(topic,content+i);
-            list.add(produceMessage);
-        }
-        return kafkaProduceMessageService.produceBatchMessage(list);
+    @GetMapping("/createKafkaSendAsyncMsg")
+    public boolean createKafkaMessageBatch(String topic,String content)throws Exception {
+        kafkaProduceMessageService.sendAsyncMsg(topic,content,new SendCallback(){
+            @Override
+            public void onSuccess(SendResult sendResult) {
+
+            }
+            @Override
+            public void onException(Throwable e) {
+
+            }
+        });
+        return true;
     }
 }
 

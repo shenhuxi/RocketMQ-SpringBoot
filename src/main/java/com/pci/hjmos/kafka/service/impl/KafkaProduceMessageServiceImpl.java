@@ -1,42 +1,39 @@
 package com.pci.hjmos.kafka.service.impl;
 
-import com.pci.hjmos.util.entity.KafkaProduceMessage;
-import com.pci.hjmos.kafka.service.KafkaProduceMessageService;
+import com.pci.hjmos.api.produce.ProduceMessageService;
+import com.pci.hjmos.util.entity.Result;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.rocketmq.client.producer.SendCallback;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Service;
-import org.springframework.util.concurrent.ListenableFuture;
-
-import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 @Service
 @Slf4j
-public class KafkaProduceMessageServiceImpl implements KafkaProduceMessageService {
+public class KafkaProduceMessageServiceImpl implements ProduceMessageService {
     @Autowired
     private KafkaTemplate<String, String> kafkaTemplate;
+    /**
+     * 发送同步消息
+     *
+     * @param topic   消息主题
+     * @param content 消息内容
+     * @return 消息发送结果
+     */
     @Override
-    public boolean produceMessage(KafkaProduceMessage produceMessage) {
-        ListenableFuture<SendResult<String, String>> send = kafkaTemplate.send(produceMessage.getTopic(), produceMessage.getContent());
-        try {
-            SendResult<String, String> stringStringSendResult = send.get();
-            log.info("发送消息成功"+stringStringSendResult.toString());
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
-
-        return true;
+    public Result sendSyncMsg(String topic, String content) throws Exception {
+        return null;
     }
 
+    /**
+     * 发送同步消息
+     *
+     * @param topic    消息主题
+     * @param content  消息内容
+     * @param callback 回调方法对象
+     */
     @Override
-    public boolean produceBatchMessage(List<KafkaProduceMessage> produceMessages) {
-        for (KafkaProduceMessage produceMessage : produceMessages) {
-            ListenableFuture<SendResult<String, String>> send = kafkaTemplate.send(produceMessage.getTopic(), produceMessage.getContent());
-        }
-        return false;
+    public void sendAsyncMsg(String topic, String content, SendCallback callback) throws Exception {
+
     }
 }

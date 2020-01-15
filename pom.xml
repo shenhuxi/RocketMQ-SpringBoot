@@ -9,9 +9,9 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.hjmos</groupId>
-    <artifactId>springboot-rocketmq</artifactId>
+    <artifactId>mq-kafka</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>springboot-rocketmq</name>
+    <name>mq-kafka</name>
     <packaging>jar</packaging>
     <description>Demo project for Spring Boot</description>
 

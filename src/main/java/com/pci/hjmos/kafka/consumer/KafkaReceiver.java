@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.Optional;
 
-@Component
+//@Component
 @Slf4j
 public class KafkaReceiver {
     //------------------- 单个消费 -------------------
