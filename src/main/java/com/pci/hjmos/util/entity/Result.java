@@ -1,13 +1,8 @@
 package com.pci.hjmos.util.entity;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import java.io.Serializable;
 
-@Getter
-@Setter
-@ToString
-public class Result {
+public class Result implements Serializable {
     /**
      * code 状态码 200：成功，500：失败
      */
@@ -21,5 +16,11 @@ public class Result {
     /**
      * 消息反馈
      */
-    private SendResult content;
+    ResultData content;
+
+    public Result(int code, String msg, ResultData content) {
+        this.code = code;
+        this.msg = msg;
+        this.content = content;
+    }
 }
