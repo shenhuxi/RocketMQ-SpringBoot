@@ -1,5 +1,6 @@
 package com.pci.hjmos.controller;
 
+import com.pci.hjmos.api.produce.MQCallback;
 import com.pci.hjmos.api.produce.ProduceMessageService;
 import com.pci.hjmos.util.entity.Result;
 import lombok.extern.slf4j.Slf4j;
@@ -24,14 +25,14 @@ public class TestRocketMQSendController {
     }
     @GetMapping("/createKafkaSendAsyncMsg")
     public boolean createKafkaMessageBatch(String topic,String content)throws Exception {
-        kafkaProduceMessageService.sendAsyncMsg(topic,content,new SendCallback(){
+        kafkaProduceMessageService.sendAsyncMsg(topic,content,new MQCallback(){
             @Override
             public void onSuccess(SendResult sendResult) {
-
+                log.info("异步消息发送完成");
             }
             @Override
             public void onException(Throwable e) {
-
+                log.info("异步消息发送异常"+e);
             }
         });
         return true;

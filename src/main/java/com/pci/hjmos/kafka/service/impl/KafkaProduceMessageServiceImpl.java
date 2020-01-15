@@ -1,6 +1,6 @@
 package com.pci.hjmos.kafka.service.impl;
 
-import com.pci.hjmos.api.produce.MQcallback;
+import com.pci.hjmos.api.produce.MQCallback;
 import com.pci.hjmos.api.produce.ProduceMessageService;
 import com.pci.hjmos.util.constant.CodeConstant;
 import com.pci.hjmos.util.constant.MsgConstant;
@@ -48,22 +48,8 @@ public class KafkaProduceMessageServiceImpl implements ProduceMessageService {
      * @param callback 回调方法对象
      */
     @Override
-    public void sendAsyncMsg(String topic, String content, MQcallback callback) throws Exception {
-        producer.send(new ProducerRecord(topic,callback),new MQcallback(){
-            @Override
-            public void onSuccess(org.apache.rocketmq.client.producer.SendResult sendResult) {
-
-            }
-
-            @Override
-            public void onException(Throwable e) {
-
-            }
-
-            @Override
-            public void onCompletion(RecordMetadata recordMetadata, Exception e) {
-                log.info("异步发送成功："+recordMetadata.toString());
-            }
-        });
+    public void sendAsyncMsg(String topic, String content, MQCallback callback) throws Exception {
+        ProducerRecord producerRecord = new ProducerRecord(topic, content);
+        producer.send(producerRecord,callback);
     }
 }

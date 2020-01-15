@@ -14,14 +14,4 @@ public abstract class MQCallback implements Callback , SendCallback{
             onException( e);
         }
     }
-
-    @Override
-    public void onException(Throwable e) {
-
-    }
-
-    @Override
-    public void onSuccess(SendResult sendResult) {
-
-    }
 }
