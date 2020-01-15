@@ -1,4 +1,4 @@
-package com.hjmos.springbootrocketmq;
+package com.pci.hjmos;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -9,10 +9,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  *
  */
 @SpringBootApplication
-public class SpringbootRocketmqApplication {
+public class MQApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(SpringbootRocketmqApplication.class, args);
+        SpringApplication.run(MQApplication.class, args);
     }
 
 }

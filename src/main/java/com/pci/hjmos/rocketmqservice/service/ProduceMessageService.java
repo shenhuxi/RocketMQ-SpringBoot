@@ -1,7 +1,6 @@
-package com.hjmos.springbootrocketmq.service;
+package com.pci.hjmos.service;
 
-import com.hjmos.springbootrocketmq.entity.ProduceMessage;
-import org.apache.rocketmq.client.exception.MQClientException;
+import com.pci.hjmos.util.entity.ProduceMessage;
 import org.apache.rocketmq.client.producer.SendResult;
 
 /**
