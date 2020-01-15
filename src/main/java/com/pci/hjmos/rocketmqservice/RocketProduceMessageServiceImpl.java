@@ -1,10 +1,15 @@
 package com.pci.hjmos.rocketmqservice;
 
 import com.pci.hjmos.api.produce.ProduceMessageService;
+import com.pci.hjmos.util.constant.CodeConstant;
+import com.pci.hjmos.util.constant.MsgConstant;
+import com.pci.hjmos.util.entity.ResultData;
 import com.pci.hjmos.util.entity.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.client.producer.*;
+import org.apache.rocketmq.common.message.Message;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 /**
@@ -13,6 +18,7 @@ import org.springframework.stereotype.Service;
  */
 @Slf4j
 @Service
+@Primary
 public class RocketProduceMessageServiceImpl implements ProduceMessageService {
     @Autowired
     private DefaultMQProducer defaultProducer;
@@ -24,7 +30,16 @@ public class RocketProduceMessageServiceImpl implements ProduceMessageService {
      */
     @Override
     public Result sendSyncMsg(String topic, String content) throws Exception {
-        return null;
+        ResultData data = new ResultData();
+        try {
+            Message msg = new Message(topic, topic, content.getBytes());
+            SendResult sendResult = defaultProducer.send(msg);
+            data = new ResultData(topic, content,sendResult.getOffsetMsgId());
+
+            return new Result(CodeConstant.RETCODE_200, MsgConstant.SUCCESS,data);
+        }catch (Exception e){
+            return new Result(CodeConstant.RETCODE_500, MsgConstant.ERROR,data);
+        }
     }
 
     /**
@@ -36,6 +51,7 @@ public class RocketProduceMessageServiceImpl implements ProduceMessageService {
      */
     @Override
     public void sendAsyncMsg(String topic, String content, SendCallback callback) throws Exception {
+
 
     }
 
