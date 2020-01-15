@@ -1,11 +1,10 @@
-package com.hjmos.springbootrocketmq.controller;
+package com.pci.hjmos.controller;
 
 import com.alibaba.fastjson.JSONObject;
-import com.hjmos.springbootrocketmq.entity.OrderStep;
-import com.hjmos.springbootrocketmq.entity.ProduceMessage;
-import com.hjmos.springbootrocketmq.service.ProduceMessageService;
+import com.pci.hjmos.util.entity.OrderStep;
+import com.pci.hjmos.util.entity.ProduceMessage;
+import com.pci.hjmos.rocketmqservice.service.ProduceMessageService;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.rocketmq.client.exception.MQClientException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

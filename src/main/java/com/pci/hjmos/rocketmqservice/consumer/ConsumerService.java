@@ -1,4 +1,4 @@
-package com.pci.hjmos.consumer;
+package com.pci.hjmos.rocketmqservice.consumer;
 
 import java.util.List;
 

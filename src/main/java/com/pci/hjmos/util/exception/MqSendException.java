@@ -1,4 +1,4 @@
-package com.hjmos.springbootrocketmq.exception;
+package com.pci.hjmos.util.exception;
 
 /**
  * mq 消息发送异常类

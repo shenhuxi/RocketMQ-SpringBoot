@@ -1,4 +1,4 @@
-package com.hjmos.springbootrocketmq.entity;
+package com.pci.hjmos.util.entity;
 
 import java.util.ArrayList;
 import java.util.List;

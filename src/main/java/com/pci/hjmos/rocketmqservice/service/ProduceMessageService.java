@@ -1,4 +1,4 @@
-package com.pci.hjmos.service;
+package com.pci.hjmos.rocketmqservice.service;
 
 import com.pci.hjmos.util.entity.ProduceMessage;
 import org.apache.rocketmq.client.producer.SendResult;

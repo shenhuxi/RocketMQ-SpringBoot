@@ -1,10 +1,10 @@
-package com.pci.hjmos.service.impl;
+package com.pci.hjmos.rocketmqservice.service.impl;
 
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
+import com.pci.hjmos.rocketmqservice.service.ProduceMessageService;
 import com.pci.hjmos.util.entity.ProduceMessage;
 import com.pci.hjmos.util.exception.MqSendException;
-import com.pci.hjmos.service.ProduceMessageService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.client.exception.MQClientException;
 import org.apache.rocketmq.client.producer.*;
