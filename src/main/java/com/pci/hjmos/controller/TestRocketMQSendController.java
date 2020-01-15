@@ -20,8 +20,6 @@ import java.util.List;
 @RestController()
 @Slf4j
 public class TestRocketMQSendController {
-//    @Autowired
-//    private ProduceMessageService produceMessageService;
     @Autowired
     private KafkaProduceMessageService kafkaProduceMessageService;
     @GetMapping("/createRocketMessage")
