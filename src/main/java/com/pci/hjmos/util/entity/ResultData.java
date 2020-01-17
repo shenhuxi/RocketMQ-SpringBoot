@@ -18,13 +18,11 @@ import java.io.Serializable;
 public class ResultData implements Serializable {
     /**
      * 主题
-     * @return
      */
     @NotBlank
     private String topic;
     /**
      * 消息内容
-     * @return
      */
     @NotBlank
     private String content;

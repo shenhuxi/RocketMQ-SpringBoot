@@ -8,10 +8,7 @@ import org.apache.rocketmq.client.producer.SendResult;
 public abstract class MQCallback implements Callback , SendCallback{
     @Override
     public void onCompletion(RecordMetadata recordMetadata, Exception e) {
-        if(e==null){
-            onSuccess(new SendResult());
-        }else{
-            onException( e);
-        }
+        if(e==null) onSuccess(new SendResult());
+        else onException( e);
     }
 }

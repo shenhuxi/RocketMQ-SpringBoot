@@ -69,14 +69,13 @@ public class KafkaConfiguration {
     //非注解监听消费方式
     @Bean
     public KafkaMessageListenerContainer demoListenerContainer() {
-        ContainerProperties properties = new ContainerProperties("topic.quick.bean");
+        ContainerProperties properties = new ContainerProperties("T6");
         properties.setGroupId("bean");
         properties.setMessageListener(new MessageListener<Integer,String>() {
             private Logger log = LoggerFactory.getLogger(this.getClass());
             @Override
             public void onMessage(ConsumerRecord<Integer, String> record) {
                 publisher.publishEvent(new MessageEvent(record));
-                log.info("topic.quick.bean receive : " + record.toString());
             }
         });
         return new KafkaMessageListenerContainer(consumerFactory(), properties);

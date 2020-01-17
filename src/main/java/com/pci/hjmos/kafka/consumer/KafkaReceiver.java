@@ -1,7 +1,9 @@
 package com.pci.hjmos.kafka.consumer;
 
+import com.pci.hjmos.util.bean.MessageEvent;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
+import org.springframework.context.event.EventListener;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.annotation.TopicPartition;
 import org.springframework.kafka.support.Acknowledgment;
@@ -9,12 +11,16 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
-
-//@Component
+@Component
 @Slf4j
 public class KafkaReceiver {
+    @EventListener(condition = "#event.msgs.topic()=='T6'")
+    public void rocketmqMsgListener3(MessageEvent event) {
+        ConsumerRecord msgs = event.getMsgs();
+        log.info("执行T6  主题的逻辑............."+msgs);
+    }
     //------------------- 单个消费 -------------------
-	@KafkaListener(topics = {"T6"},groupId = "user")
+	@KafkaListener(topics = {"T.ack","aaa"},groupId = "user")
     public void listen(ConsumerRecord<?, ?> record) {
         Optional<?> kafkaMessage = Optional.ofNullable(record.value());
         if (kafkaMessage.isPresent()) {
@@ -23,7 +29,7 @@ public class KafkaReceiver {
         }
     }
     //------------------- 批量消费+监听分区消费 -------------------
-    @KafkaListener(id = "batch",clientIdPrefix = "batch",containerFactory = "batchContainerFactory",topicPartitions = {
+    @KafkaListener(id = "re",clientIdPrefix = "batch",containerFactory = "batchContainerFactory",topicPartitions = {
             @TopicPartition(topic = "T.batch",partitions = {"1"})})//初始消费位置,partitionOffsets = @PartitionOffset(partition = "0",initialOffset = "8")
     public void batchListener(List<ConsumerRecord<?, ?>> data) {
         log.info("主题：T.batch分区:"+data.get(0).partition()+";接收到的消息数 : "+data.size());

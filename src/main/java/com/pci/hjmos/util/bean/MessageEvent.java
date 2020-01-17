@@ -14,7 +14,7 @@ import java.util.List;
  */
 public class MessageEvent extends ApplicationEvent {
     private static final long serialVersionUID = -4468405250074063206L;
-    private ConsumerRecord msgs;
+    private ConsumerRecord<Integer, String> msgs;
 
     public MessageEvent(ConsumerRecord msgs) {
         super(msgs);
