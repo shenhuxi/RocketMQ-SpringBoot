@@ -7,11 +7,8 @@ import com.pci.hjmos.util.constant.MsgConstant;
 import com.pci.hjmos.util.entity.Result;
 import com.pci.hjmos.util.entity.ResultData;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.kafka.clients.producer.Callback;
 import org.apache.kafka.clients.producer.Producer;
 import org.apache.kafka.clients.producer.ProducerRecord;
-import org.apache.kafka.clients.producer.RecordMetadata;
-import org.apache.rocketmq.client.producer.SendCallback;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
@@ -41,7 +38,7 @@ public class KafkaProduceMessageServiceImpl implements ProduceMessageService {
     }
 
     /**
-     * 发送同步消息
+     * 异步消息，没有ListenableFuture.get()
      *
      * @param topic    消息主题
      * @param content  消息内容
@@ -49,7 +46,7 @@ public class KafkaProduceMessageServiceImpl implements ProduceMessageService {
      */
     @Override
     public void sendAsyncMsg(String topic, String content, MQCallback callback) throws Exception {
-        ProducerRecord producerRecord = new ProducerRecord(topic, content);
+        ProducerRecord<String, String> producerRecord = new ProducerRecord<>(topic, content);
         producer.send(producerRecord,callback);
     }
 }
