@@ -8,7 +8,7 @@ server:
 #  rocketmq 相关配置
 rocketmq:
   # 指定namesrv地址
-  namesrvAddr: 192.168.236.130:9876
+  namesrvAddr: 192.168.236.137:9876;192.168.236.136:9876
   #生产者group名称
   producerGroupName: producerGroupName
   #事务生产者group名称
@@ -25,9 +25,9 @@ rocketmq:
       enable: true
       groupName: CCTV
       topic: my-topic
-      tags: aa
+      tags: my-topic
       # 指定namesrv地址
-      namesrvAddr: 192.168.236.130:9876
+      namesrvAddr: 192.168.236.137:9876;192.168.236.136:9876
       #广播消费
       consumerBroadCasting: false
       #一次最大消费多少数量消息
@@ -40,7 +40,7 @@ rocketmq:
       topic: orderTopic
       tags: aa
       # 指定namesrv地址
-      namesrvAddr: 192.168.236.130:9876
+      namesrvAddr: 192.168.236.137:9876;192.168.236.136:9876
       #广播消费
       consumerBroadCasting: false
       #一次最大消费多少数量消息
@@ -51,7 +51,7 @@ rocketmq:
 spring:
   kafka:
     # 指定kafka 代理地址，可以多个
-    bootstrap-servers: 127.0.0.1:9092
+    bootstrap-servers: 192.168.236.137:9092;192.168.236.137:9093;192.168.236.137:9094
     # ------------------生产者配置-------------------------
     producer:
       retries: 0
@@ -68,7 +68,7 @@ spring:
     # ------------------消费者配置-------------------------
     consumer:
       # 消费者组
-#      group-id: test-consumer-group
+      group-id: user
       auto-offset-reset: earliest
       # 是否自动确认offset
       enable-auto-commit: true
@@ -77,3 +77,11 @@ spring:
       # 指定消息key和消息体的编解码方式
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+
+# 消息中间件开关处理 1：开启   0：关闭
+mq:
+  enabled: 1
+  kafka:
+    enabled: 1
+  rocketmq:
+    enabled: 1
