@@ -35,8 +35,11 @@ import java.util.stream.Collectors;
 @Slf4j
 public class RocketMqConfiguration {
 
+    /**
+     * rocketmq 配置信息类
+     */
     @Autowired
-    private RocketMQProperties rocketMQProperties;
+    private RocketMQProperties consumerMQProperties;
 
     /**
      * 事件监听
@@ -51,9 +54,9 @@ public class RocketMqConfiguration {
     /**
      * 容器初始化的时候 打印参数
      */
-    @PostConstruct
-    public void init() {
-    }
+//    @PostConstruct
+//    public void init() {
+//    }
 
     /**
      * 创建普通消息发送者实例
@@ -61,18 +64,18 @@ public class RocketMqConfiguration {
      * @return
      * @throws MQClientException
      */
-    @Bean
-    public DefaultMQProducer defaultProducer() throws MQClientException {
-        DefaultMQProducer producer = new DefaultMQProducer(
-                rocketMQProperties.getProducerGroupName());
-        producer.setNamesrvAddr(rocketMQProperties.getNamesrvAddr());
-        producer.setInstanceName(rocketMQProperties.getProducerInstanceName());
-        producer.setVipChannelEnabled(false);
-        producer.setRetryTimesWhenSendAsyncFailed(10);
-        producer.start();
-        log.info("rocketmq producer server is starting....");
-        return producer;
-    }
+//    @Bean
+//    public DefaultMQProducer defaultProducer() throws MQClientException {
+//        DefaultMQProducer producer = new DefaultMQProducer(
+//                rocketMQProperties.getProducerGroupName());
+//        producer.setNamesrvAddr(rocketMQProperties.getNamesrvAddr());
+//        producer.setInstanceName(rocketMQProperties.getProducerInstanceName());
+//        producer.setVipChannelEnabled(false);
+//        producer.setRetryTimesWhenSendAsyncFailed(10);
+//        producer.start();
+//        log.info("rocketmq producer server is starting....");
+//        return producer;
+//    }
 
     /**
      * 创建支持消息事务发送的实例
@@ -80,31 +83,34 @@ public class RocketMqConfiguration {
      * @return
      * @throws MQClientException
      */
-    @Bean
-    public TransactionMQProducer transactionProducer() throws MQClientException {
-        TransactionMQProducer producer = new TransactionMQProducer(
-                rocketMQProperties.getTransactionProducerGroupName());
-        producer.setNamesrvAddr(rocketMQProperties.getNamesrvAddr());
-        producer.setInstanceName(rocketMQProperties
-                .getProducerTranInstanceName());
-        producer.setRetryTimesWhenSendAsyncFailed(10);
-        // 事务回查最小并发数
-        producer.setCheckThreadPoolMinSize(2);
-        // 事务回查最大并发数
-        producer.setCheckThreadPoolMaxSize(2);
-        // 队列数
-        producer.setCheckRequestHoldMax(2000);
-        producer.start();
-        log.info("rocketmq transaction producer server is starting....");
-        return producer;
-    }
+//    @Bean
+//    public TransactionMQProducer transactionProducer() throws MQClientException {
+//        TransactionMQProducer producer = new TransactionMQProducer(
+//                rocketMQProperties.getTransactionProducerGroupName());
+//        producer.setNamesrvAddr(rocketMQProperties.getNamesrvAddr());
+//        producer.setInstanceName(rocketMQProperties
+//                .getProducerTranInstanceName());
+//        producer.setRetryTimesWhenSendAsyncFailed(10);
+//        // 事务回查最小并发数
+//        producer.setCheckThreadPoolMinSize(2);
+//        // 事务回查最大并发数
+//        producer.setCheckThreadPoolMaxSize(2);
+//        // 队列数
+//        producer.setCheckRequestHoldMax(2000);
+//        producer.start();
+//        log.info("rocketmq transaction producer server is starting....");
+//        return producer;
+//    }
 
     /**
      * 初始化消费者
      */
     @Bean
     public void initConsumerInstance() {
-        List<Map<String, Object>> consumerList = rocketMQProperties.getConsumerList();
+        if(consumerMQProperties == null){
+            return ;
+        }
+        List<Map<String,Object>> consumerList = consumerMQProperties.getConsumerList();
         if (consumerList.size() > 0) {
             consumerList.stream().forEach(map -> {
                 try {
@@ -206,7 +212,7 @@ public class RocketMqConfiguration {
      * @return
      */
     private List<MessageExt> filterMessage(List<MessageExt> msgs) {
-        if (isFirstSub && !rocketMQProperties.isEnableHistoryConsumer()) {
+        if (isFirstSub && !consumerMQProperties.isEnableHistoryConsumer()) {
             msgs = msgs.stream()
                     .filter(item -> startTime - item.getBornTimestamp() < 0)
                     .collect(Collectors.toList());
