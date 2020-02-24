@@ -1,5 +1,6 @@
 package com.pci.hjmos.rocketmqservice;
 
+import com.pci.hjmos.api.produce.MQCallback;
 import com.pci.hjmos.api.produce.ProduceMessageService;
 import com.pci.hjmos.util.constant.CodeConstant;
 import com.pci.hjmos.util.constant.MsgConstant;
@@ -13,7 +14,6 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 /**
- * @author yuyang
  * 生产消息的服务实现
  */
 @Slf4j
@@ -43,15 +43,20 @@ public class RocketProduceMessageServiceImpl implements ProduceMessageService {
     }
 
     /**
-     * 发送同步消息
+     * 发送异步消息
      *
      * @param topic    消息主题
      * @param content  消息内容
      * @param callback 回调方法对象
      */
     @Override
-    public void sendAsyncMsg(String topic, String content, SendCallback callback) throws Exception {
-
+    public void sendAsyncMsg(String topic, String content, MQCallback callback) throws Exception {
+        try {
+            Message msg = new Message(topic, topic, content.getBytes());
+            defaultProducer.send(msg, callback);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
     }
 
