@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ import java.util.Map;
 @ToString
 @Component
 @ConfigurationProperties(prefix = "rocketmq")
+@Primary
 public class RocketMQProperties {
     private String namesrvAddr;
     private String producerGroupName;
