@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public interface ProduceMessageService {
+
     /**
      * 发送同步消息
      * @param topic 消息主题
@@ -26,6 +27,11 @@ public interface ProduceMessageService {
      */
     void sendAsyncMsg(String topic, String content, MQCallback callback) throws Exception;
 
-
+    /**
+     * 发送单向消息
+     * @param topic  消息主题
+     * @param content  消息内容
+     */
+    void sendOneWayMsg(String topic,String content);
 
 }
