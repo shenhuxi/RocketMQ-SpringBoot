@@ -1,5 +1,6 @@
 package com.pci.hjmos.kafkaservice;
 
+import com.pci.hjmos.api.produce.MQCallback;
 import com.pci.hjmos.api.produce.ProduceMessageService;
 import com.pci.hjmos.util.entity.Result;
 import lombok.extern.slf4j.Slf4j;
@@ -37,7 +38,7 @@ public class KafkaProduceMessageServiceImpl implements ProduceMessageService {
      * @param callback 回调方法对象
      */
     @Override
-    public void sendAsyncMsg(String topic, String content, SendCallback callback) throws Exception {
+    public void sendAsyncMsg(String topic, String content, MQCallback callback) throws Exception {
 
     }
 
