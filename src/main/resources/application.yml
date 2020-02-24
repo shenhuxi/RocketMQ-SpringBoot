@@ -47,6 +47,7 @@ rocketmq:
       consumerBatchMaxSize: 1
       #启动顺序消费
       enableOrderConsumer: false
+
 # kafka相关配置
 spring:
   kafka:
